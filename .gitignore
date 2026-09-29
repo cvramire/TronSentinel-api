@@ -101,3 +101,7 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Datos on-chain (pesados, no deben ir en git)
+TronSentinel-data/
+*.ndjson
