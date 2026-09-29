@@ -1,0 +1,199 @@
+import {FeatureVector} from "./contracts";
+
+const DAY_MS = 86_400_000;
+export const MAX_STABLECOIN_TRANSFER_AMOUNT = 1_000_000_000_000;
+
+export const ONCHAIN_FEATURE_NAMES = [
+  "transferCount", "transactionCount", "activeDays", "activeDayRatio",
+  "averageDailyTransfers", "inboundCount", "outboundCount", "inboundRatio",
+  "outboundRatio", "totalAmount", "inboundAmount", "outboundAmount",
+  "netFlowAmount", "meanAmount", "amountStd", "amountCv", "maxAmount",
+  "uniqueCounterparties", "uniqueInboundCounterparties",
+  "uniqueOutboundCounterparties", "repeatedCounterpartyRatio",
+  "topCounterpartyShare", "counterpartyHhi", "counterpartyEntropy",
+  "inboundTopCounterpartyShare", "outboundTopCounterpartyShare",
+  "selfTransferCount", "selfTransferRatio", "usdtTransferCount",
+  "tusdTransferCount", "usdtAmount", "tusdAmount", "meanInterEventSeconds",
+  "interEventStdSeconds", "interEventCv", "burstiness", "observedSpanDays",
+  "daysSinceLastTransfer",
+] as const;
+
+export interface OnchainTransfer {
+  transactionId: string;
+  blockTimestamp: number;
+  from: string;
+  to: string;
+  valueRaw: string;
+  tokenAddress: string;
+  tokenSymbol: string;
+  tokenDecimals: number;
+  type: "Transfer";
+}
+
+export interface AmountQuality {
+  invalidAmountEvents: number;
+  clippedAmountEvents: number;
+  excludedNonTransferEvents: number;
+}
+
+function safeRatio(numerator: number, denominator: number): number {
+  return denominator ? numerator / denominator : 0;
+}
+
+function tokenAmount(record: OnchainTransfer, quality: AmountQuality): number {
+  const raw = Number(record.valueRaw);
+  const amount = raw / (10 ** Number(record.tokenDecimals || 0));
+  if (!Number.isFinite(amount) || amount < 0) {
+    quality.invalidAmountEvents += 1;
+    return 0;
+  }
+  if (amount > MAX_STABLECOIN_TRANSFER_AMOUNT) {
+    quality.clippedAmountEvents += 1;
+    return MAX_STABLECOIN_TRANSFER_AMOUNT;
+  }
+  return amount;
+}
+
+function concentration(values: Map<string, number>): {
+  top: number; hhi: number; entropy: number;
+} {
+  let total = 0;
+  for (const value of values.values()) total += value;
+  if (!total) return {top: 0, hhi: 0, entropy: 0};
+  let top = 0;
+  let hhi = 0;
+  let entropy = 0;
+  for (const value of values.values()) {
+    const share = value / total;
+    top = Math.max(top, share);
+    hhi += share ** 2;
+    if (share > 0) entropy -= share * Math.log(share);
+  }
+  return {top, hhi, entropy};
+}
+
+function addCounterparty(map: Map<string, number>, key: string, amount: number): void {
+  if (key) map.set(key, (map.get(key) || 0) + amount);
+}
+
+export function buildOnchainFeatures(input: {
+  address: string;
+  asOfMs: number;
+  lookbackDays: number;
+  transfers: OnchainTransfer[];
+}): {features: FeatureVector; quality: AmountQuality} {
+  const quality: AmountQuality = {
+    invalidAmountEvents: 0,
+    clippedAmountEvents: 0,
+    excludedNonTransferEvents: 0,
+  };
+  let inbound = 0;
+  let outbound = 0;
+  let self = 0;
+  let total = 0;
+  let inboundAmount = 0;
+  let outboundAmount = 0;
+  let sumSquares = 0;
+  let maxAmount = 0;
+  const transactions = new Set<string>();
+  const days = new Set<string>();
+  const timestamps: number[] = [];
+  const counterparties = new Map<string, number>();
+  const inboundCounterparties = new Map<string, number>();
+  const outboundCounterparties = new Map<string, number>();
+  const tokenCount = {USDT: 0, TUSD: 0};
+  const tokenTotals = {USDT: 0, TUSD: 0};
+
+  for (const record of input.transfers) {
+    if (String(record.type).toLowerCase() !== "transfer") {
+      quality.excludedNonTransferEvents += 1;
+      continue;
+    }
+    const amount = tokenAmount(record, quality);
+    const isInbound = record.to === input.address;
+    const isOutbound = record.from === input.address;
+    const counterparty = isInbound && isOutbound ? input.address :
+      (isInbound ? record.from : record.to);
+    inbound += isInbound ? 1 : 0;
+    outbound += isOutbound ? 1 : 0;
+    self += isInbound && isOutbound ? 1 : 0;
+    total += amount;
+    inboundAmount += isInbound ? amount : 0;
+    outboundAmount += isOutbound ? amount : 0;
+    sumSquares += amount ** 2;
+    maxAmount = Math.max(maxAmount, amount);
+    transactions.add(record.transactionId);
+    timestamps.push(record.blockTimestamp);
+    days.add(new Date(record.blockTimestamp).toISOString().slice(0, 10));
+    addCounterparty(counterparties, counterparty, amount || 1);
+    if (isInbound) addCounterparty(inboundCounterparties, record.from, amount || 1);
+    if (isOutbound) addCounterparty(outboundCounterparties, record.to, amount || 1);
+    const symbol = record.tokenSymbol.toUpperCase();
+    if (symbol === "USDT" || symbol === "TUSD") {
+      tokenCount[symbol] += 1;
+      tokenTotals[symbol] += amount;
+    }
+  }
+
+  const count = input.transfers.length - quality.excludedNonTransferEvents;
+  const mean = safeRatio(total, count);
+  const variance = Math.max(0, safeRatio(sumSquares, count) - mean ** 2);
+  const std = Math.sqrt(variance);
+  const allConcentration = concentration(counterparties);
+  const inboundConcentration = concentration(inboundCounterparties);
+  const outboundConcentration = concentration(outboundCounterparties);
+  const times = timestamps.sort((a, b) => a - b);
+  const gaps: number[] = [];
+  for (let index = 1; index < times.length; index += 1) {
+    gaps.push((times[index] - times[index - 1]) / 1000);
+  }
+  const gapMean = safeRatio(gaps.reduce((sum, value) => sum + value, 0), gaps.length);
+  const gapVariance = safeRatio(
+    gaps.reduce((sum, value) => sum + (value - gapMean) ** 2, 0),
+    gaps.length,
+  );
+  const gapStd = Math.sqrt(gapVariance);
+  const features: FeatureVector = {
+    transferCount: count,
+    transactionCount: transactions.size,
+    activeDays: days.size,
+    activeDayRatio: safeRatio(days.size, input.lookbackDays),
+    averageDailyTransfers: safeRatio(count, input.lookbackDays),
+    inboundCount: inbound,
+    outboundCount: outbound,
+    inboundRatio: safeRatio(inbound, count),
+    outboundRatio: safeRatio(outbound, count),
+    totalAmount: total,
+    inboundAmount,
+    outboundAmount,
+    netFlowAmount: inboundAmount - outboundAmount,
+    meanAmount: mean,
+    amountStd: std,
+    amountCv: safeRatio(std, mean),
+    maxAmount,
+    uniqueCounterparties: counterparties.size,
+    uniqueInboundCounterparties: inboundCounterparties.size,
+    uniqueOutboundCounterparties: outboundCounterparties.size,
+    repeatedCounterpartyRatio: safeRatio(count - counterparties.size, count),
+    topCounterpartyShare: allConcentration.top,
+    counterpartyHhi: allConcentration.hhi,
+    counterpartyEntropy: allConcentration.entropy,
+    inboundTopCounterpartyShare: inboundConcentration.top,
+    outboundTopCounterpartyShare: outboundConcentration.top,
+    selfTransferCount: self,
+    selfTransferRatio: safeRatio(self, count),
+    usdtTransferCount: tokenCount.USDT,
+    tusdTransferCount: tokenCount.TUSD,
+    usdtAmount: tokenTotals.USDT,
+    tusdAmount: tokenTotals.TUSD,
+    meanInterEventSeconds: gapMean,
+    interEventStdSeconds: gapStd,
+    interEventCv: safeRatio(gapStd, gapMean),
+    burstiness: safeRatio(gapStd - gapMean, gapStd + gapMean),
+    observedSpanDays: times.length > 1 ?
+      (times[times.length - 1] - times[0]) / DAY_MS : 0,
+    daysSinceLastTransfer: times.length ?
+      (input.asOfMs - times[times.length - 1]) / DAY_MS : input.lookbackDays,
+  };
+  return {features, quality};
+}

@@ -1,0 +1,19 @@
+import admin from "firebase-admin";
+import {NextFunction, Request, Response, Router} from "express";
+import {scoreTransaction, scoreTransactionShadow} from "../risk/scoring-service";
+
+export function transactionScoreRouter(db: admin.firestore.Firestore): Router {
+  const router = Router();
+  router.post("/shadow", async (request: Request, response: Response, next: NextFunction) => {
+    try { response.json(await scoreTransactionShadow(db, request.body || {})); } catch (error) { next(error); }
+  });
+  router.post("/", async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const result = await scoreTransaction(db, request.body || {});
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+  return router;
+}

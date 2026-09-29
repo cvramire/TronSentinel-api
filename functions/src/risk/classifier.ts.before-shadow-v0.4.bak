@@ -1,0 +1,95 @@
+import {
+  ClassifierResult,
+  FeatureVector,
+  RiskLevel,
+  TronSentinelModel,
+} from "./contracts";
+
+const EPSILON = 1e-9;
+const FORBIDDEN_FEATURE_PATTERN =
+  /(blacklist|blocklist|ofac|tatum|risk.?score|risk.?level|tagged.?malicious|security.?status|label)/i;
+
+function clamp(value: number, min = 0, max = 1): number {
+  if (!Number.isFinite(value)) return min;
+  return Math.max(min, Math.min(max, value));
+}
+
+function sigmoid(value: number): number {
+  if (value >= 0) {
+    const exp = Math.exp(-Math.min(value, 40));
+    return 1 / (1 + exp);
+  }
+  const exp = Math.exp(Math.max(value, -40));
+  return exp / (1 + exp);
+}
+
+function riskLevel(probability: number, model: TronSentinelModel): RiskLevel {
+  if (probability >= model.thresholds.high) return "HIGH";
+  if (probability >= model.thresholds.medium) return "MEDIUM";
+  return "LOW";
+}
+
+export function validateModel(model: TronSentinelModel): void {
+  if (model.status !== "CHAMPION") throw new Error("MODEL_NOT_CHAMPION");
+  if (!model.modelVersion || !model.featureSetVersion || !model.labelVersion) {
+    throw new Error("MODEL_METADATA_INCOMPLETE");
+  }
+  if (!Array.isArray(model.featureNames) || model.featureNames.length === 0) {
+    throw new Error("MODEL_FEATURES_EMPTY");
+  }
+  const forbiddenFeature = model.featureNames.find((name) =>
+    FORBIDDEN_FEATURE_PATTERN.test(name),
+  );
+  if (forbiddenFeature) {
+    throw new Error(`LEAKAGE_FEATURE_FORBIDDEN:${forbiddenFeature}`);
+  }
+  if (!Array.isArray(model.stumps) || model.stumps.length === 0) {
+    throw new Error("MODEL_STUMPS_EMPTY");
+  }
+  if (!(model.thresholds.medium > 0 &&
+        model.thresholds.high > model.thresholds.medium &&
+        model.thresholds.high < 1 + EPSILON)) {
+    throw new Error("MODEL_THRESHOLDS_INVALID");
+  }
+}
+
+export function predict(
+  model: TronSentinelModel,
+  features: FeatureVector,
+): ClassifierResult {
+  validateModel(model);
+
+  for (const name of model.featureNames) {
+    if (!Number.isFinite(features[name])) {
+      throw new Error(`FEATURE_MISSING:${name}`);
+    }
+  }
+
+  let rawLogit = model.baseLogit;
+  const totals = new Map<string, number>();
+
+  for (const stump of model.stumps) {
+    if (!model.featureNames.includes(stump.feature)) {
+      throw new Error(`MODEL_FEATURE_UNKNOWN:${stump.feature}`);
+    }
+    const branch = features[stump.feature] <= stump.threshold ?
+      stump.leftValue : stump.rightValue;
+    const contribution = model.learningRate * branch;
+    rawLogit += contribution;
+    totals.set(stump.feature, (totals.get(stump.feature) || 0) + contribution);
+  }
+
+  const calibratedLogit = model.calibrator.a * rawLogit + model.calibrator.b;
+  const probability = clamp(sigmoid(calibratedLogit));
+  const contributions = [...totals.entries()]
+    .map(([feature, contribution]) => ({feature, contribution}))
+    .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution))
+    .slice(0, 5);
+
+  return {
+    probability,
+    score: Math.round(probability * 100),
+    riskLevel: riskLevel(probability, model),
+    contributions,
+  };
+}

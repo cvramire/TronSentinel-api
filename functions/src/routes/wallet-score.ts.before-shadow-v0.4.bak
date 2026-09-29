@@ -1,0 +1,16 @@
+import admin from "firebase-admin";
+import {NextFunction, Request, Response, Router} from "express";
+import {scoreWallet} from "../risk/scoring-service";
+
+export function walletScoreRouter(db: admin.firestore.Firestore): Router {
+  const router = Router();
+  router.post("/", async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const result = await scoreWallet(db, request.body || {});
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+  return router;
+}

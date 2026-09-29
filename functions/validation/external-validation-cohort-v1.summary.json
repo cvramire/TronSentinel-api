@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "cohortVersion": "tronsentinel-external-validation-v1",
+  "output": "/workspace/scratch/e5acc4d5cb04/outputs/tronsentinel-external-validation-v1/external-validation-cohort.csv",
+  "rows": 800,
+  "positives": 200,
+  "controls": 600,
+  "excludedFromTraining": true,
+  "followupDays": 90,
+  "positivePeriod": {
+    "from": "2026-01-01T00:00:00.000Z",
+    "to": "2026-06-09T23:59:59.999Z"
+  },
+  "latestLabelAtUtc": "2026-09-25T11:55:21.000Z",
+  "generatedAtUtc": "2026-09-27T20:10:28.113Z"
+}

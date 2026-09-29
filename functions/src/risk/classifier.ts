@@ -1,0 +1,193 @@
+import {
+  ClassifierResult,
+  FeatureVector,
+  RiskLevel,
+  ShadowClassifierResult,
+  ShadowRiskLevel,
+  OnchainShadowModel,
+  TronSentinelModel,
+} from "./contracts";
+
+const EPSILON = 1e-9;
+const FORBIDDEN_FEATURE_PATTERN =
+  /(blacklist|blocklist|ofac|tatum|risk.?score|risk.?level|tagged.?malicious|security.?status|label)/i;
+
+function clamp(value: number, min = 0, max = 1): number {
+  if (!Number.isFinite(value)) return min;
+  return Math.max(min, Math.min(max, value));
+}
+
+function sigmoid(value: number): number {
+  if (value >= 0) {
+    const exp = Math.exp(-Math.min(value, 40));
+    return 1 / (1 + exp);
+  }
+  const exp = Math.exp(Math.max(value, -40));
+  return exp / (1 + exp);
+}
+
+function riskLevel(probability: number, model: TronSentinelModel): RiskLevel {
+  if (probability >= model.thresholds.high) return "HIGH";
+  if (probability >= model.thresholds.medium) return "MEDIUM";
+  return "LOW";
+}
+
+function riskScore(probability: number, model: TronSentinelModel): number {
+  const mapping = model.scoreMapping;
+  if (!mapping) return Math.round(probability * 100);
+  const {medium, high} = model.thresholds;
+  let score;
+  if (probability < medium) {
+    score = mapping.mediumScore * probability / medium;
+  } else if (probability < high) {
+    score = mapping.mediumScore +
+      (mapping.highScore - mapping.mediumScore) *
+      (probability - medium) / (high - medium);
+  } else {
+    score = mapping.highScore +
+      (100 - mapping.highScore) *
+      (probability - high) / (mapping.capProbability - high);
+  }
+  return Math.round(clamp(score, 0, 100));
+}
+
+export function validateModel(model: TronSentinelModel): void {
+  if (model.status !== "CHAMPION") throw new Error("MODEL_NOT_CHAMPION");
+  if (!model.modelVersion || !model.featureSetVersion || !model.labelVersion) {
+    throw new Error("MODEL_METADATA_INCOMPLETE");
+  }
+  if (!Array.isArray(model.featureNames) || model.featureNames.length === 0) {
+    throw new Error("MODEL_FEATURES_EMPTY");
+  }
+  const forbiddenFeature = model.featureNames.find((name) =>
+    FORBIDDEN_FEATURE_PATTERN.test(name),
+  );
+  if (forbiddenFeature) {
+    throw new Error(`LEAKAGE_FEATURE_FORBIDDEN:${forbiddenFeature}`);
+  }
+  if (!Array.isArray(model.stumps) || model.stumps.length === 0) {
+    throw new Error("MODEL_STUMPS_EMPTY");
+  }
+  if (!(model.thresholds.medium > 0 &&
+        model.thresholds.high > model.thresholds.medium &&
+        model.thresholds.high < 1 + EPSILON)) {
+    throw new Error("MODEL_THRESHOLDS_INVALID");
+  }
+  if (model.scoreMapping && !(
+    model.scoreMapping.type === "risk_threshold_piecewise" &&
+    model.scoreMapping.mediumScore > 0 &&
+    model.scoreMapping.highScore > model.scoreMapping.mediumScore &&
+    model.scoreMapping.highScore < 100 &&
+    model.scoreMapping.capProbability > model.thresholds.high &&
+    model.scoreMapping.capProbability <= 1
+  )) throw new Error("MODEL_SCORE_MAPPING_INVALID");
+}
+
+export function predict(
+  model: TronSentinelModel,
+  features: FeatureVector,
+): ClassifierResult {
+  validateModel(model);
+
+  for (const name of model.featureNames) {
+    if (!Number.isFinite(features[name])) {
+      throw new Error(`FEATURE_MISSING:${name}`);
+    }
+  }
+
+  let rawLogit = model.baseLogit;
+  const totals = new Map<string, number>();
+
+  for (const stump of model.stumps) {
+    if (!model.featureNames.includes(stump.feature)) {
+      throw new Error(`MODEL_FEATURE_UNKNOWN:${stump.feature}`);
+    }
+    const branch = features[stump.feature] <= stump.threshold ?
+      stump.leftValue : stump.rightValue;
+    const contribution = model.learningRate * branch;
+    rawLogit += contribution;
+    totals.set(stump.feature, (totals.get(stump.feature) || 0) + contribution);
+  }
+
+  const calibratedLogit = model.calibrator.a * rawLogit + model.calibrator.b;
+  const probability = clamp(sigmoid(calibratedLogit));
+  const contributions = [...totals.entries()]
+    .map(([feature, contribution]) => ({feature, contribution}))
+    .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution))
+    .slice(0, 5);
+
+  return {
+    probability,
+    score: riskScore(probability, model),
+    riskLevel: riskLevel(probability, model),
+    contributions,
+  };
+}
+
+function percentileScore(probability: number, reference: number[]): number {
+  let low = 0;
+  let high = reference.length;
+  while (low < high) {
+    const middle = Math.floor((low + high) / 2);
+    if (reference[middle] <= probability) low = middle + 1;
+    else high = middle;
+  }
+  return Math.round(clamp(100 * low / reference.length, 0, 100));
+}
+
+function shadowLevel(score: number, model: OnchainShadowModel): ShadowRiskLevel {
+  const bands = model.scoreCalibration.riskBands;
+  if (score <= bands.lowMax) return "LOW";
+  if (score <= bands.mediumMax) return "MEDIUM";
+  if (score <= bands.highMax) return "HIGH";
+  return "CRITICAL";
+}
+
+export function validateShadowModel(model: OnchainShadowModel): void {
+  if (model.status !== "CHALLENGER" || model.deploymentMode !== "SHADOW") {
+    throw new Error("SHADOW_MODEL_STATUS_INVALID");
+  }
+  if (model.productionProbabilityReady !== false || !model.governance?.shadowDeploymentAllowed) {
+    throw new Error("SHADOW_MODEL_GOVERNANCE_INVALID");
+  }
+  if (!model.featureNames.length || !model.stumps.length) throw new Error("SHADOW_MODEL_EMPTY");
+  const forbiddenFeature = model.featureNames.find((name) => FORBIDDEN_FEATURE_PATTERN.test(name));
+  if (forbiddenFeature) throw new Error(`LEAKAGE_FEATURE_FORBIDDEN:${forbiddenFeature}`);
+  const calibration = model.scoreCalibration;
+  if (calibration.type !== "empirical_control_percentile_v1" ||
+      calibration.referenceScores.length < 100 ||
+      calibration.referenceScores.some((value, index, values) =>
+        !Number.isFinite(value) || (index > 0 && value < values[index - 1]))) {
+    throw new Error("SHADOW_SCORE_CALIBRATION_INVALID");
+  }
+}
+
+export function predictShadow(
+  model: OnchainShadowModel,
+  features: FeatureVector,
+): ShadowClassifierResult {
+  validateShadowModel(model);
+  for (const name of model.featureNames) {
+    if (!Number.isFinite(features[name])) throw new Error(`FEATURE_MISSING:${name}`);
+  }
+  let rawLogit = model.baseLogit;
+  const totals = new Map<string, number>();
+  for (const stump of model.stumps) {
+    const branch = features[stump.feature] <= stump.threshold ? stump.leftValue : stump.rightValue;
+    const contribution = model.learningRate * branch;
+    rawLogit += contribution;
+    totals.set(stump.feature, (totals.get(stump.feature) || 0) + contribution);
+  }
+  const sampleProbability = clamp(sigmoid(model.calibrator.a * rawLogit + model.calibrator.b));
+  const riskScore = percentileScore(sampleProbability, model.scoreCalibration.referenceScores);
+  return {
+    sampleProbability,
+    riskScore,
+    riskLevel: shadowLevel(riskScore, model),
+    reviewRecommended: sampleProbability >= model.shadowThreshold.reviewProbability,
+    contributions: [...totals.entries()]
+      .map(([feature, contribution]) => ({feature, contribution}))
+      .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution))
+      .slice(0, 5),
+  };
+}

@@ -1,0 +1,57 @@
+{
+  "name": "tronsentinel-api",
+  "private": true,
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "build": "npm run lint && tsc",
+    "lint": "eslint --ext .js,.ts .",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck && tsc && node --test lib/risk/classifier.test.js scripts/build-point-in-time-snapshots.test.mjs scripts/label-point-in-time-snapshots.test.mjs",
+    "test:risk-ai": "npm test",
+    "test:data": "node --test scripts/build-point-in-time-snapshots.test.mjs",
+    "test:export-risk-data": "node --test scripts/export-risk-data.test.mjs",
+    "test:screen-risk-wallets": "node --test scripts/screen-risk-wallets.test.mjs",
+    "export:risk-data": "node scripts/export-risk-data.mjs",
+    "risk:sample": "node scripts/screen-risk-wallets.mjs sample",
+    "risk:screen": "node scripts/screen-risk-wallets.mjs screen",
+    "risk:blacklist-history": "node scripts/screen-risk-wallets.mjs blacklist-history",
+    "risk:blacklist-actions": "node scripts/screen-risk-wallets.mjs blacklist-actions",
+    "risk:blacklist-resolve": "node scripts/screen-risk-wallets.mjs blacklist-resolve",
+    "dataset:snapshots": "node scripts/build-point-in-time-snapshots.mjs",
+    "dataset:validate": "node scripts/validate-point-in-time-snapshots.mjs",
+    "dataset:label": "node scripts/label-point-in-time-snapshots.mjs",
+    "dataset:validate-labels": "node scripts/validate-labeled-dataset.mjs",
+    "test:labeling": "node --test scripts/label-point-in-time-snapshots.test.mjs",
+    "onchain:cohort": "node scripts/prepare-onchain-cohort.mjs",
+    "onchain:history": "node scripts/fetch-onchain-history.mjs",
+    "onchain:consolidate": "node --max-old-space-size=4096 scripts/consolidate-onchain-history.mjs",
+    "onchain:features": "node --max-old-space-size=4096 scripts/build-onchain-features.mjs",
+    "onchain:model:train": "python3 scripts/train-onchain-model.py"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@google-cloud/tasks": "^6.2.3",
+    "@google-cloud/translate": "^9.4.2",
+    "axios": "^1.17.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "firebase-admin": "^13.10.0",
+    "firebase-functions": "^7.2.5",
+    "i18next": "^26.3.1",
+    "multicoin-address-validator": "^0.5.26",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.60.1",
+    "@typescript-eslint/parser": "^8.60.1",
+    "typescript": "^6.0.3"
+  }
+}
