@@ -11,13 +11,13 @@ TronSentinel es un modelo supervisado que prioriza wallets de la red TRON para r
 
 La unidad evaluada es la **wallet**, no la transacción individual: las transferencias son evidencia histórica usada para construir variables. Todas las variables se calculan antes de la fecha índice; la blacklist nunca entra como predictor.
 
-Pipeline: eventos USDT/TUSD → ventana de 90 días previos → 38 variables → Gradient Boosting → score + recomendación de revisión.
+Pipeline: eventos USDT → ventana de 90 días previos → 38 variables → Gradient Boosting → score + recomendación de revisión.
 
 **Pregunta que responde:** ¿qué tan parecido es el comportamiento reciente de una wallet a los patrones observados antes de inclusiones confirmadas en la blacklist de Tether?
 
 **Qué incluye:**
 
-- Wallets TRON con actividad confirmada en los contratos analizados de USDT y TUSD.
+- Wallets TRON con actividad confirmada en los contratos analizados de USDT.
 - Ventanas estrictas de 90 días anteriores a la fecha índice.
 - Un único clasificador Gradient Boosting con calibración Platt.
 - Explicación mediante contribuciones de variables y revisión humana en modo `SHADOW`.
@@ -62,7 +62,7 @@ Las variables resumen la actividad de cada wallet dentro de su ventana de 90 dí
 | Contrapartes | `uniqueCounterparties`, `uniqueInboundCounterparties`, `uniqueOutboundCounterparties`, `repeatedCounterpartyRatio` | Diversidad y repetición |
 | Concentración | `topCounterpartyShare`, `counterpartyHhi`, `counterpartyEntropy`, `inboundTopCounterpartyShare`, `outboundTopCounterpartyShare` | Dependencia de contrapartes dominantes |
 | Autotransferencias | `selfTransferCount`, `selfTransferRatio` | Movimientos hacia la misma dirección |
-| Activos | `usdtTransferCount`, `tusdTransferCount`, `usdtAmount`, `tusdAmount` | Actividad por token |
+| Activos | `usdtTransferCount`, `usdtAmount` | Actividad por token |
 | Temporalidad | `meanInterEventSeconds`, `interEventStdSeconds`, `interEventCv`, `burstiness`, `observedSpanDays`, `daysSinceLastTransfer` | Ritmo, ráfagas y recencia |
 
 **Regla anti-leakage:** ninguna variable contiene `blacklist`, `label`, `riskScore`, `riskLevel` ni un score previo. Todas se derivan de eventos confirmados anteriores a `indexAtUtc`.
