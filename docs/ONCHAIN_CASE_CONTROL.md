@@ -1,6 +1,6 @@
 # Enriquecimiento on-chain caso-control
 
-El histórico de Wallet Alert no conserva contrapartes. Para entrenar variables de grafo sin fuga temporal se construye una cohorte adicional:
+El histórico disponible no conserva contrapartes. Para entrenar variables de grafo sin fuga temporal se construye una cohorte adicional:
 
 - casos: wallets añadidas a blacklist durante el período cubierto por la plataforma;
 - controles: wallets activas del mismo mes que nunca aparecen en el histórico de blacklist;

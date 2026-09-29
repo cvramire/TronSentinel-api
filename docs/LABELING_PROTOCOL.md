@@ -39,7 +39,7 @@ address,chain,category,action,dateBasis,effectiveAtUtc,observedAtUtc,source,evid
 - OFAC puede utilizarse para `SANCTIONED` si la fecha de publicación es trazable.
 - Un resultado actual de Tatum o TRONSCAN Security sirve como evidencia de revisión, pero no sustituye una fecha histórica de inclusión.
 - `NOT_FLAGGED_AT_CHECK_TIME` no significa que una wallet sea limpia permanentemente.
-- Los scores y niveles del Wallet Alert anterior no son ground truth y el pipeline los rechaza.
+- Los scores y niveles de un sistema de scoring anterior no son ground truth y el pipeline los rechaza.
 
 ## Ejecución
 

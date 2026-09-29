@@ -4,7 +4,7 @@ Versión: `tron-wallet-behavior-2.0.0`
 
 ## Unidad de observación
 
-Cada fila representa una wallet TRON observada al procesar un evento histórico de Wallet Alert. El snapshot incluye el evento que origina la observación y todos los eventos anteriores de esa wallet. Nunca utiliza eventos posteriores.
+Cada fila representa una wallet TRON observada al procesar un evento histórico registrado. El snapshot incluye el evento que origina la observación y todos los eventos anteriores de esa wallet. Nunca utiliza eventos posteriores.
 
 ## Ventanas temporales
 
@@ -24,7 +24,7 @@ Las variables se calculan sobre ventanas móviles de 1, 7, 30 y 90 días termina
 
 ## Campos excluidos
 
-Los siguientes campos de Wallet Alert se conservan únicamente para auditoría del sistema anterior y nunca se incorporan al vector del modelo:
+Los siguientes campos del sistema anterior se conservan únicamente para auditoría del sistema anterior y nunca se incorporan al vector del modelo:
 
 - `legacy_risk_score_raw`
 - `legacy_risk_score_capped_100`

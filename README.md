@@ -1,17 +1,17 @@
 # TronSentinel API
 
-Backend académico derivado de la arquitectura técnica de Wallet Alert. Utiliza Node.js 22, TypeScript, Express, Firebase Functions de segunda generación y Firestore.
+Backend académico del proyecto [TronSentinel](https://github.com/cvramire/TronSentinel-api). Utiliza Node.js 22, TypeScript, Express, Firebase Functions de segunda generación y Firestore.
 
-## Estado de esta copia
+## Estado de este backend
 
-El backend monolítico de Wallet Alert ya fue reemplazado por una API académica mínima. No contiene Telegram, pagos, usuarios, alertas comerciales, ScoreCombinado, reglas determinísticas ni componente bayesiano.
+Es una API académica mínima enfocada exclusivamente en scoring de riesgo de wallets en la red TRON. No contiene Telegram, pagos, usuarios, alertas comerciales, ScoreCombinado, reglas determinísticas ni componente bayesiano.
 
-La API utiliza exclusivamente un modelo con estado `CHAMPION` registrado en Firestore. Mientras no exista el dataset punto en el tiempo y no se promueva un modelo, los endpoints de scoring devolverán `MODEL_NOT_AVAILABLE`; no existe fallback hacia el scoring anterior.
+La API utiliza exclusivamente un modelo con estado `CHAMPION` registrado en Firestore. Mientras no exista el dataset punto en el tiempo y no se promueva un modelo, los endpoints de scoring devolverán `MODEL_NOT_AVAILABLE`; no existe fallback hacia un scoring anterior.
 
-La copia excluye deliberadamente:
+El repositorio excluye deliberadamente:
 
 - credenciales y archivos `.env`;
-- `.firebaserc` de Wallet Alert;
+- `.firebaserc` de otros proyectos Firebase;
 - dependencias instaladas en `node_modules`;
 - código compilado en `lib`;
 - frontend y bot;
@@ -24,7 +24,7 @@ La copia excluye deliberadamente:
 3. Copiar `functions/.env.example` como `functions/.env` solo para desarrollo local.
 4. Guardar secretos de despliegue mediante Google Secret Manager.
 
-No se debe apuntar esta copia al proyecto `walletalert-f063b`.
+No se debe apuntar esta copia a otro proyecto Firebase distinto de `pry-tronsentinel`.
 
 ## Proyecto Firebase
 
@@ -82,7 +82,7 @@ No se debe desplegar el scoring hasta construir los snapshots, ejecutar el backt
 
 ## Etiquetado histórico
 
-El pipeline de etiquetado cruza los snapshots con eventos externos confirmados y fechados. No utiliza los scores anteriores como etiquetas ni convierte automáticamente una revisión actual de Tatum en un evento histórico.
+El pipeline de etiquetado cruza los snapshots con eventos externos confirmados y fechados. No utiliza scores anteriores como etiquetas ni convierte automáticamente una revisión actual de Tatum en un evento histórico.
 
 ```bash
 cd functions
