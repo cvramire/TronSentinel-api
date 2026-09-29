@@ -96,6 +96,10 @@ npm run dataset:label -- \
 
 La especificación completa se encuentra en `docs/LABELING_PROTOCOL.md`. Las filas sin seguimiento futuro completo se censuran; las wallets ya listadas al momento del snapshot se excluyen.
 
+## Documentación del modelo
+
+`docs/MODEL_CARD.md` es la ficha completa del modelo `tronsentinel-onchain-riskset-v0.6.1-20260928`: diseño del dataset, las 38 variables, hiperparámetros de entrenamiento, calibración Platt, umbral operativo, métricas de validación (test interno y holdout externo), explicabilidad de las predicciones, limitaciones conocidas y trazabilidad. Es la versión en Markdown, para lectura y control de versiones en el repositorio, del documento original en `docs/Documentacion_Modelo_TronSentinel.pdf` (que conserva el diseño y los gráficos).
+
 ## Frontend de evaluación manual (front/)
 
 `front/evaluador-wallet-tronsentinel.html` es una página estática de una sola vista para evaluar manualmente una wallet TRON contra el modelo, en modo `SHADOW` (sin acciones automáticas). No tiene backend propio: se conecta directamente, desde el navegador, a los endpoints ya desplegados en Firebase Functions:
