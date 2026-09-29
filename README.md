@@ -95,3 +95,21 @@ npm run dataset:label -- \
 ```
 
 La especificación completa se encuentra en `docs/LABELING_PROTOCOL.md`. Las filas sin seguimiento futuro completo se censuran; las wallets ya listadas al momento del snapshot se excluyen.
+
+## Frontend de evaluación manual (front/)
+
+`front/evaluador-wallet-tronsentinel.html` es una página estática de una sola vista para evaluar manualmente una wallet TRON contra el modelo, en modo `SHADOW` (sin acciones automáticas). No tiene backend propio: se conecta directamente, desde el navegador, a los endpoints ya desplegados en Firebase Functions:
+
+- `GET /v1/model/shadow` — metadata del modelo activo y el umbral operativo de revisión.
+- `POST /v1/score/wallet/shadow/live` — score de riesgo, banda percentil, contribuciones principales de las variables y estado del historial on-chain de 90 días para la wallet consultada.
+
+El usuario ingresa la dirección TRON y una API key (header `x-api-key`); la clave solo se usa en memoria del navegador para esa consulta puntual y no se guarda ni se envía a ningún otro destino.
+
+### Ejecutar localmente
+
+```bash
+cd front
+python3 -m http.server 8080
+```
+
+Luego abrir `http://localhost:8080/evaluador-wallet-tronsentinel.html` en el navegador. Se recomienda servirlo con un servidor HTTP local en vez de abrir el archivo directamente con `file://`, ya que algunos navegadores restringen `fetch` y el acceso al portapapeles bajo ese esquema.
