@@ -204,8 +204,8 @@ Usa 30 semillas y 5.000 repeticiones de bootstrap; tarda varios minutos.
 ```bash
 npm run onchain:model:diagnose -- \
   --dataset $DEV/onchain-feature-dataset.csv --manifest $DEV/onchain-feature-manifest.json \
-  --output-dir ../reports/overfitting-$V
-python3 -c "import json;d=json.load(open('../reports/overfitting-$V/diagnosis_v2.json'));print(d['diagnosis']['diagnosis'], d['selection']['conclusion'])"
+  --output-dir ../results/reports/overfitting-$V
+python3 -c "import json;d=json.load(open('../results/reports/overfitting-$V/diagnosis_v2.json'));print(d['diagnosis']['diagnosis'], d['selection']['conclusion'])"
 ```
 
 ### 3.2 Entrenar el candidato

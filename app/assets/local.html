@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TronSentinel · Evaluador local</title>
+  <link rel="icon" href="/assets/logo.svg">
+  <style>
+    :root { --bg:#f4f7fb; --panel:#ffffff; --ink:#152033; --muted:#5b6b82; --line:#dfe6ef; --accent:#13a88a; --warn:#b26b00; --bad:#d23f4f; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0d1420; --panel:#151f2e; --ink:#e8eef7; --muted:#9aabc2; --line:#26344a; --accent:#3fd3b0; --warn:#f2b55a; --bad:#ff7b88; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    main { max-width:1040px; margin:0 auto; padding:24px 16px 48px; }
+    header { display:flex; gap:12px; align-items:center; margin-bottom:18px; }
+    header img { width:36px; height:36px; }
+    h1 { font-size:22px; margin:0; } h2 { font-size:16px; margin:0 0 10px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; }
+    .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    button, .file { border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:10px; padding:9px 14px; font:inherit; cursor:pointer; }
+    button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+    button:disabled { opacity:.5; cursor:wait; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { color:var(--muted); font-weight:600; text-transform:uppercase; font-size:11px; letter-spacing:.04em; }
+    td.addr { font-family:ui-monospace, monospace; word-break:break-all; }
+    .yes { color:var(--warn); font-weight:700; } .no { color:var(--accent); font-weight:700; }
+    .error { border-color:var(--bad); color:var(--bad); }
+    .hidden { display:none; }
+    .table-wrap { overflow-x:auto; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="/assets/logo.svg" alt="">
+    <div><h1>TronSentinel · Evaluador local</h1>
+      <div class="muted">Puntúa variables ya calculadas con el artefacto desplegado v0.6.1, sin red ni clave. Modo SHADOW: el resultado orienta una revisión humana.</div></div>
+  </header>
+
+  <section class="panel">
+    <h2>1. Probar con un ejemplo</h2>
+    <p class="muted">Carga una wallet del holdout externo (sus 38 variables ya calculadas) y la evalúa.</p>
+    <div class="row">
+      <button class="primary" id="riskButton" type="button">Prueba con ejemplo riesgoso</button>
+      <button id="controlButton" type="button">Prueba con ejemplo legítimo</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>2. Evaluar un archivo CSV</h2>
+    <p class="muted">El CSV debe tener las 38 columnas del modelo (ver <code>data/README.md</code>); <code>address</code> y <code>target</code> son opcionales. Máximo 5000 filas y 5 MB. <a href="/assets/ejemplo_wallets.csv" download>Descargar CSV de ejemplo</a>.</p>
+    <form class="row" id="csvForm">
+      <input class="file" type="file" id="csvFile" name="file" accept=".csv,text/csv" required>
+      <button class="primary" type="submit" id="csvButton">Evaluar CSV</button>
+    </form>
+  </section>
+
+  <section class="panel hidden" id="status" role="status" aria-live="polite"></section>
+
+  <section class="panel hidden" id="results">
+    <div class="row" style="justify-content:space-between"><h2>Resultados</h2><button id="downloadButton" type="button">Descargar CSV</button></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Wallet</th><th>Probabilidad muestral</th><th>Decisión</th><th>Etiqueta real</th><th>Factores principales</th></tr></thead>
+      <tbody id="resultBody"></tbody>
+    </table></div>
+    <p class="muted">La probabilidad proviene de una muestra caso-control (≈ 22–35 % de riesgosas); con una prevalencia real cercana al 1 % la mayoría de alertas serían falsas. No usar para bloquear fondos.</p>
+  </section>
+</main>
+<script>
+  const $ = (selector) => document.querySelector(selector);
+  let lastRows = [];
+  const pct = (value) => value < 0.0001 ? "< 0,01 %" : (value * 100).toLocaleString("es-EC", { maximumFractionDigits: 2 }) + " %";
+
+  function setStatus(message, isError = false) {
+    const box = $("#status");
+    box.textContent = message;
+    box.classList.toggle("error", isError);
+    box.classList.toggle("hidden", !message);
+  }
+
+  function render(rows) {
+    lastRows = rows;
+    $("#resultBody").replaceChildren(...rows.map((row) => {
+      const tr = document.createElement("tr");
+      const truth = row.groundTruth === null || row.groundTruth === undefined ? "—" : (row.groundTruth ? "Riesgosa (blacklist)" : "Control");
+      const factors = row.contributions.slice(0, 3).map((c) => `${c.feature} ${c.contribution >= 0 ? "+" : ""}${c.contribution.toFixed(3)}`).join(" · ");
+      [[row.id, "addr"], [pct(row.sampleProbability)], [row.reviewRecommended ? "Requiere revisión" : "No requiere revisión", row.reviewRecommended ? "yes" : "no"], [truth], [factors]]
+        .forEach(([text, cls]) => { const td = document.createElement("td"); td.textContent = text; if (cls) td.className = cls; tr.append(td); });
+      return tr;
+    }));
+    $("#results").classList.remove("hidden");
+  }
+
+  async function call(url, options) {
+    const response = await fetch(url, options);
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.message || `Error ${response.status}`);
+    return data;
+  }
+
+  async function runSample(kind) {
+    setStatus("Evaluando ejemplo…");
+    document.querySelectorAll("button").forEach((b) => (b.disabled = true));
+    try {
+      const sample = await call(`/api/local/sample?kind=${kind}&index=${Math.floor(Math.random() * 50)}`);
+      const result = await call("/api/local/score", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ features: sample.features }) });
+      render([{ id: sample.address, groundTruth: sample.groundTruth, ...result }]);
+      setStatus("");
+    } catch (error) { setStatus(error.message, true); }
+    finally { document.querySelectorAll("button").forEach((b) => (b.disabled = false)); }
+  }
+
+  $("#riskButton").addEventListener("click", () => runSample("risk"));
+  $("#controlButton").addEventListener("click", () => runSample("control"));
+  $("#csvForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const file = $("#csvFile").files[0];
+    if (!file) return setStatus("Selecciona un archivo CSV.", true);
+    if (file.size > 5 * 1024 * 1024) return setStatus("El archivo supera 5 MB.", true);
+    setStatus("Evaluando archivo…");
+    $("#csvButton").disabled = true;
+    try {
+      const form = new FormData(); form.append("file", file);
+      const data = await call("/api/local/score-csv", { method: "POST", body: form });
+      render(data.rows);
+      setStatus(`${data.rows.length} wallets evaluadas; ${data.rows.filter((r) => r.reviewRecommended).length} requieren revisión.`);
+    } catch (error) { setStatus(error.message, true); }
+    finally { $("#csvButton").disabled = false; }
+  });
+  $("#downloadButton").addEventListener("click", () => {
+    const header = "wallet,probabilidad_muestral,requiere_revision,etiqueta_real";
+    const lines = lastRows.map((r) => [r.id, r.sampleProbability.toFixed(6), r.reviewRecommended, r.groundTruth ?? ""].join(","));
+    const blob = new Blob([[header, ...lines].join("\n")], { type: "text/csv" });
+    const link = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "tronsentinel_resultados.csv" });
+    link.click(); URL.revokeObjectURL(link.href);
+  });
+</script>
+</body>
+</html>

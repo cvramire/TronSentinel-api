@@ -1,0 +1,7 @@
+conjunto,banda,riesgosas,controles,recall,recall IC95,FPR
+test interno,volumen bajo (tercil 1),5,92,0.2,0.04–0.62,0.010869565217391304
+test interno,volumen medio (tercil 2),21,58,0.8571428571428571,0.65–0.95,0.06896551724137931
+test interno,volumen alto (tercil 3),34,72,0.8823529411764706,0.73–0.95,0.041666666666666664
+holdout externo,volumen bajo (tercil 1),19,79,0.3684210526315789,0.19–0.59,0.0
+holdout externo,volumen medio (tercil 2),38,58,0.9210526315789473,0.79–0.97,0.06896551724137931
+holdout externo,volumen alto (tercil 3),42,50,0.8809523809523809,0.75–0.95,0.06

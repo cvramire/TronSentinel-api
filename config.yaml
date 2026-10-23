@@ -1,0 +1,37 @@
+# Configuración del pipeline de TronSentinel (rutas relativas a la raíz del repositorio).
+project:
+  name: TronSentinel
+  seed: 20260927
+
+data:
+  development: data/processed/development_dataset_v6.csv
+  external_holdout: data/processed/external_holdout_v6.csv
+  manifest: data/processed/development_manifest_v6.json
+  group_column: matchedCaseId
+  split_column: datasetSplit
+  target_column: target
+  lookback_days: 90
+
+model:
+  # Configuración desplegada v0.6.1 (stumps: el scorer TypeScript solo admite profundidad 1)
+  params:
+    n_estimators: 150
+    learning_rate: 0.04
+    max_depth: 1
+    min_samples_leaf: 20
+    subsample: 0.8
+  calibration: platt          # regresión logística 1D sobre el logit, ajustada en validación
+  max_validation_fpr: 0.05    # regla del umbral: máximo F1 con FPR de validación <= 5 %
+  version: tronsentinel-onchain-riskset-v0.6.1-20260928
+
+artifacts:
+  deployed_json: models/model_v0.6.1.json
+  best_model: models/best_model.pkl
+  baseline_model: models/model_v1.pkl
+  train_summary: results/metrics/train_summary.json
+
+app:
+  host: 127.0.0.1
+  port: 8080
+  remote_api: https://us-central1-pry-tronsentinel.cloudfunctions.net/TRONSENTINEL
+  public_url: https://pry-tronsentinel.web.app

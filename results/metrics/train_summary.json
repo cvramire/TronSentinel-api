@@ -1,0 +1,34 @@
+{
+  "modelVersion": "tronsentinel-onchain-riskset-v0.6.1-20260928",
+  "calibrator": {
+    "a": 1.8489783892851288,
+    "b": -1.9442626124416174
+  },
+  "validation": {
+    "gradientBoosting": {
+      "threshold": 0.42888289739994356,
+      "accuracy": 0.9496402877697842,
+      "recall": 0.9166666666666666,
+      "precision": 0.859375,
+      "f1": 0.8870967741935484,
+      "fpr": 0.04128440366972477,
+      "auc": 0.9814220183486239,
+      "auc_pr": 0.9349587282029832
+    },
+    "logisticBaseline": {
+      "threshold": 0.8608608763287401,
+      "accuracy": 0.9100719424460432,
+      "recall": 0.7166666666666667,
+      "precision": 0.8431372549019608,
+      "f1": 0.7747747747747747,
+      "fpr": 0.03669724770642202,
+      "auc": 0.968730886850153,
+      "auc_pr": 0.8881523230921525
+    }
+  },
+  "parityWithDeployedArtifact": {
+    "checked": true,
+    "maxAbsProbabilityDifference": 2.220446049250313e-16,
+    "sameThreshold": true
+  }
+}

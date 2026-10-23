@@ -105,3 +105,14 @@ node_modules/
 # Datos on-chain (pesados, no deben ir en git)
 TronSentinel-data/
 *.ndjson
+
+# Python / Jupyter / pruebas
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+# Datos crudos (solo se versiona data/processed y los README)
+data/raw/*
+!data/raw/README.md
+gitignore_extra.txt
