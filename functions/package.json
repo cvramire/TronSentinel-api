@@ -10,7 +10,7 @@
     "build": "npm run lint && tsc",
     "lint": "eslint --ext .js,.ts .",
     "typecheck": "tsc --noEmit",
-    "test": "npm run typecheck && tsc && node --test lib/risk/classifier.test.js lib/risk/onchain-features.test.js scripts/build-point-in-time-snapshots.test.mjs scripts/label-point-in-time-snapshots.test.mjs",
+    "test": "npm run typecheck && tsc && node --test lib/risk/classifier.test.js lib/risk/onchain-features.test.js lib/routes/demo.test.js scripts/build-point-in-time-snapshots.test.mjs scripts/label-point-in-time-snapshots.test.mjs",
     "test:risk-ai": "npm test",
     "test:data": "node --test scripts/build-point-in-time-snapshots.test.mjs",
     "test:export-risk-data": "node --test scripts/export-risk-data.test.mjs",
