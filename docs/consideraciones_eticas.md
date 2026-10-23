@@ -109,6 +109,28 @@ Esta evaluación es académica y no sustituye la asesoría jurídica. Antes de c
 
 Con 1 % de wallets riesgosas, ~82 de cada 100 alertas serían falsas. Por eso **la alerta solo ordena la revisión humana**.
 
+### Matriz de riesgos priorizada
+
+Diferenciamos cada riesgo por su severidad (daño si ocurre) y su probabilidad (en el uso previsto), con una escala explícita:
+
+| Nivel | Severidad (daño si ocurre) | Probabilidad (en el uso previsto) |
+|---|---|---|
+| Alta | Daño económico irreversible o afectación de derechos de una persona (pérdida de fondos, exclusión, exposición de identidad). | Medida en nuestros datos con frecuencia ≥ 10 % de los casos relevantes, o inevitable con la prevalencia real. |
+| Media | Daño reversible mediante revisión o apelación (revisión innecesaria, demora, molestia reputacional corregible). | Frecuencia medida entre 1 % y 10 %, o requiere que falle un solo control. |
+| Baja | Molestia operativa sin efecto sobre derechos ni fondos. | Menor al 1 %, o requiere que fallen dos o más controles independientes (por ejemplo SHADOW, contrato y revisión humana). |
+
+| Riesgo | Evidencia | Sev. | Prob. | Afectados |
+|---|---|---|---|---|
+| Sesgo de representación y proxies | Recall de 0,37 en bajo volumen; la recencia separa casos de controles por el diseño del muestreo. | Alta | Alta | Wallets de bajo volumen y perfiles atípicos |
+| Daño por error de clasificación | Con prevalencia de 1 %, cerca del 82 % de las alertas serían falsas. | Alta | Media | Propietarios, usuarios y analistas |
+| Privacidad y reidentificación | No almacenamos identidad; el riesgo aparece al combinar la dirección con datos KYC del integrador. | Alta | Baja | Titulares identificables |
+| Opacidad y mala interpretación | `productionProbabilityReady=false`; la precisión muestral (0,92) cae a cerca de 0,18 con prevalencia de 1 %. | Media | Alta | Usuarios no técnicos y decisores |
+| Pérdida de autonomía | Colores y etiquetas pueden generar autoridad aparente; mitigado por SHADOW y motivo humano obligatorio. | Media | Media | Usuarios y analistas |
+| Seguridad, drift y disponibilidad | Dependencia de TronGrid; 6,5 % de NOT_SCORABLE en validación como línea base. | Media | Media | Todos los usuarios |
+| Responsabilidad difusa | Equipo de dos personas con roles definidos (sección 6); falta formalizar con integradores. | Media | Baja | Personas afectadas y la organización |
+
+Priorizamos la auditoría por subgrupos (sección 2) y los criterios de pausa (sección 6) según estos niveles.
+
 ## 6. Responsabilidad
 
 **¿Quién responde si el modelo falla?** El equipo responde por la calidad técnica, la documentación y las limitaciones
