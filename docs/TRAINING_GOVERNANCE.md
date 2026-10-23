@@ -97,6 +97,9 @@ Ninguno puede usarse para escoger 150 frente a 914 estimadores, ajustar profundi
 
 ## Comandos
 
+Guía completa paso a paso, con todos los comandos: [`TRAINING_RUNBOOK.md`](./TRAINING_RUNBOOK.md). El ciclo exige `freeze-candidate.py` antes de abrir el test. `calibrate-onchain-score.py` ya no habilita el despliegue SHADOW; solo `seal-shadow-artifact.py` lo hace, después de aprobar el test interno y el holdout externo.
+
+
 ```bash
 cd functions
 # Entrenar un candidato (test sellado)

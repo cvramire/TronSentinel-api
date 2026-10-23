@@ -81,6 +81,12 @@ def main():
     governance = model.get("governance", {})
     if governance.get("decision") != "READY_FOR_FREEZE":
         raise SystemExit(f"MODEL_NOT_READY_FOR_FREEZE:{governance.get('decision')}")
+    freeze_path = model_path.parent / "candidate-freeze-manifest.json"
+    if not freeze_path.exists():
+        raise SystemExit("CANDIDATE_NOT_FROZEN: ejecutar freeze-candidate.py primero")
+    freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
+    if freeze.get("fileHashes", {}).get("model") != model_hash:
+        raise SystemExit("MODEL_CHANGED_AFTER_FREEZE")
 
     ledger = load_ledger(args.ledger)
     assert_partition_unopened(ledger, dataset_hash, args.partition)
