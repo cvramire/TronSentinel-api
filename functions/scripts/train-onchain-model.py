@@ -92,6 +92,12 @@ def parse_args():
     parser.add_argument("--bootstrap", type=int, default=DEFAULT_BOOTSTRAP_REPETITIONS)
     parser.add_argument("--min-pr-auc-lift", type=float, default=DEFAULT_MIN_PR_AUC_LIFT)
     parser.add_argument(
+        "--neutralize-features",
+        default="",
+        help="Variables (separadas por coma) que se fijan en 0 durante el entrenamiento para que ningún "
+             "stump las use. El esquema de 38 variables se mantiene; el scorer las recibe pero no las usa.",
+    )
+    parser.add_argument(
         "--max-validation-fpr",
         type=float,
         default=0.05,
@@ -318,6 +324,12 @@ def main():
     if too_large.any():
         columns = sorted({feature_names[index] for index in np.where(too_large)[1]})
         raise ValueError(f"FEATURES_EXCEED_FLOAT32_RANGE:{','.join(columns)}")
+    neutralized = [name.strip() for name in args.neutralize_features.split(",") if name.strip()]
+    unknown = [name for name in neutralized if name not in feature_names]
+    if unknown:
+        raise ValueError(f"UNKNOWN_NEUTRALIZED_FEATURES:{','.join(unknown)}")
+    for name in neutralized:
+        x[:, feature_names.index(name)] = 0.0
     y = frame["target"].to_numpy(dtype=np.int8)
     masks = {name: frame["datasetSplit"].eq(name).to_numpy() for name in ("train", "validation", "test")}
     for name, mask in masks.items():
@@ -394,6 +406,8 @@ def main():
     eligible = all(checks.values())
 
     stumps = export_stumps(classifier, feature_names)
+    if any(stump["feature"] in neutralized for stump in stumps):
+        raise ValueError("NEUTRALIZED_FEATURE_USED_BY_MODEL")
     base_logit = float(classifier._raw_predict_init(x[masks["train"]][:1])[0][0])
     hyperparameters = {
         "nEstimators": int(n_estimators),
@@ -402,6 +416,7 @@ def main():
         "minSamplesLeaf": int(args.min_samples_leaf),
         "subsample": float(args.subsample),
         "seed": int(args.seed),
+        "neutralizedFeatures": neutralized,
     }
     model = {
         "modelVersion": args.model_version,
