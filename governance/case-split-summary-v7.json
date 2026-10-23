@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "source": "/Users/carlosramirez/Desktop/TronSentinel-data/onchain-features-v7/onchain-feature-dataset.csv",
+  "sourceSha256": "886059abf6baf897b2fb58795d80f39d49426bf8e01133d11f954fbfbbec0e8d",
+  "rule": "chronological: most recent cases go to the external holdout",
+  "development": {
+    "cases": 548,
+    "fromUtc": "2026-06-10T07:03:57.000Z",
+    "toUtc": "2026-09-02T13:42:54.000Z",
+    "sha256": "6e284bc44581cfab0ae1692235d984c80c2546bed1d65026eaf20409d68be8a0"
+  },
+  "external": {
+    "cases": 150,
+    "fromUtc": "2026-09-02T13:42:57.000Z",
+    "toUtc": "2026-09-19T19:17:09.000Z",
+    "sha256": "6556f72fae3ebca3d7312a6bbd8dca12f5871169f486cc7d9065828995284324",
+    "locked": true
+  },
+  "generatedAtUtc": "2026-10-23T04:25:59.283883+00:00"
+}
