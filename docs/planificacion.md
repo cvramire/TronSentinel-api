@@ -85,6 +85,15 @@ ciclo v7 (rechazado) y al rediseño del muestreo para v8.
 | Software | Git y GitHub | Versionamiento |
 | Personas | 2 integrantes; revisión de la docente | Desarrollo y validación |
 
+### Reparto de roles
+
+| Integrante | Rol |
+|---|---|
+| Carlos Vladimir Ramírez Espinoza | Arquitectura del sistema, pipeline de datos on-chain, modelado, API y despliegue en Firebase |
+| Madheline Katerine Torres Hallo | Análisis exploratorio, evaluación del modelo, consideraciones éticas y documentación |
+
+Ambos participamos en la definición del problema, las decisiones de diseño y la revisión de resultados.
+
 ## 6. Riesgos identificados y mitigación
 
 | Riesgo | Prob. | Impacto | Mitigación aplicada | Estado |
