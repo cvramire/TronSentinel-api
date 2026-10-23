@@ -16,7 +16,8 @@ def parse_args():
     parser.add_argument("--model", required=True)
     parser.add_argument("--robustness", required=True)
     parser.add_argument("--output-dir", required=True)
-    parser.add_argument("--artifact-version", default="tronsentinel-wallet-shadow-v0.4.0-20260927")
+    parser.add_argument("--artifact-version", required=True)
+    parser.add_argument("--label-version", default="tronsentinel-blacklist-labels-2026-09-27-v6.4")
     return parser.parse_args()
 
 
@@ -63,7 +64,7 @@ def main():
         "artifactVersion": args.artifact_version,
         "status": "CHALLENGER",
         "deploymentMode": "SHADOW",
-        "labelVersion": "tronsentinel-blacklist-labels-2026-09-27-v6.4",
+        "labelVersion": args.label_version,
         "lookbackDays": int(manifest["lookbackDays"]),
         "productionProbabilityReady": False,
         "scoreCalibration": {
@@ -77,7 +78,7 @@ def main():
         },
         "shadowThreshold": {
             "reviewProbability": float(model["thresholds"]["candidateHighControlledFpr"]),
-            "selection": "validation_fpr_at_most_0.10",
+            "selection": f"validation_fpr_at_most_{model['thresholds'].get('maximumValidationFpr', 0.10)}",
         },
         "metrics": {
             "cleanTest": robustness["cleanModelTest"],
@@ -87,7 +88,9 @@ def main():
         "governance": {
             **robustness["governance"],
             "productionPromotionAllowed": False,
-            "shadowDeploymentAllowed": True,
+            # Solo seal-shadow-artifact.py lo habilita, tras test interno y holdout externo.
+            "shadowDeploymentAllowed": False,
+            "pendingExternalApproval": True,
         },
         "calibratedAtUtc": datetime.now(timezone.utc).isoformat(),
     }
@@ -104,7 +107,8 @@ def main():
         "probabilityQuantiles": quantiles,
         "reviewProbability": artifact["shadowThreshold"]["reviewProbability"],
         "productionProbabilityReady": False,
-        "shadowDeploymentAllowed": True,
+        "shadowDeploymentAllowed": False,
+        "nextStep": "seal-shadow-artifact.py",
         "output": str(output_path),
     }
     (output_dir / "wallet-shadow-calibration-summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
