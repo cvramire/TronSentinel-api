@@ -93,8 +93,7 @@ export function findExample(id: unknown): DemoExample {
 }
 
 function publicExample(example: DemoExample) {
-  const {address, ...rest} = example;
-  return {...rest, addressMasked: `${address.slice(0, 6)}…${address.slice(-4)}`};
+  return {...example};
 }
 
 const CACHE_MS = 6 * 60 * 60 * 1000;
@@ -132,9 +131,8 @@ export function demoRouter(db: admin.firestore.Firestore): Router {
       let body: object;
       try {
         const result = await scoreWalletShadowLive(db, {address: example.address, asOf: example.asOf});
-        const shown = publicExample(example);
-        // La dirección completa no se expone: un control legítimo marcado como falsa alarma no debe quedar señalado.
-        body = {...result, address: shown.addressMasked, demo: shown};
+        // Se muestra la dirección completa para que la evaluación sea verificable en el explorador público.
+        body = {...result, demo: publicExample(example)};
       } catch (error) {
         if (!(error instanceof ApiError) || error.status !== 422) throw error;
         status = 422;

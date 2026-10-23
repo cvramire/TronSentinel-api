@@ -65,7 +65,10 @@
     .example:disabled { opacity: .6; cursor: wait; }
     .example strong { display: block; font-size: .9rem; margin-bottom: 3px; }
     .example span { color: var(--muted); font-size: .78rem; line-height: 1.4; }
-    .example .tag { float: right; font-size: .68rem; font-weight: 800; padding: 3px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+    .example .addr { display: block; margin-top: 6px; font: 600 .74rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--brand); overflow-wrap: anywhere; }
+    .example .date { display: block; margin-top: 2px; font-size: .72rem; color: var(--muted); }
+    .wallet-address a { color: inherit; text-decoration: none; border-bottom: 1px dashed var(--muted); }
+    .explorer { display: inline-block; margin-top: 4px; font: 600 .76rem Inter, system-ui, sans-serif; }
     .try { margin-bottom: 12px; }
     .security-note { display: flex; gap: 9px; margin: 16px 0 0; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; line-height: 1.45; }
     .security-note svg { width: 17px; flex: 0 0 auto; color: var(--brand); }
@@ -181,7 +184,7 @@
         <div id="demoPane" role="tabpanel" aria-labelledby="tabDemo">
           <button class="primary try" id="tryButton" type="button">Prueba con ejemplo</button>
           <div class="examples" id="examples" aria-live="polite"><span class="hint">Cargando ejemplos…</span></div>
-          <small class="hint">Son wallets reales del holdout externo, evaluadas en vivo con el modelo desplegado en la fecha previa a su etiquetado. Las direcciones se muestran abreviadas.</small>
+          <small class="hint">Son wallets reales del holdout externo, evaluadas en vivo con el modelo desplegado en la fecha previa a su etiquetado. Las direcciones son públicas en la blockchain y se pueden verificar en Tronscan.</small>
         </div>
 
         <form id="scoreForm" class="hidden" role="tabpanel" aria-labelledby="tabKey" novalidate>
@@ -216,7 +219,7 @@
           </div>
         </div>
         <div class="loading hidden" id="loadingState">
-          <div><div class="big-spinner" aria-hidden="true"></div><strong>Consultando TronGrid y calculando 38 variables…</strong><br><span class="muted">Puede tardar entre 5 y 30 segundos.</span></div>
+          <div><div class="big-spinner" aria-hidden="true"></div><strong>Consultando TronGrid y calculando 38 variables…</strong><p class="wallet-address" id="loadingWallet" style="margin:8px 0"></p><span class="muted">Puede tardar entre 5 y 30 segundos.</span></div>
         </div>
         <div class="hidden" id="errorState"></div>
 
@@ -428,6 +431,25 @@
       return Number.isFinite(value) ? value : null;
     }
 
+    function renderAddress(address) {
+      const target = $("#resultAddress");
+      target.replaceChildren();
+      if (!address || !TRON_ADDRESS.test(address)) { target.textContent = address || "—"; return; }
+      const label = document.createElement("span");
+      label.className = "muted";
+      label.style.font = "600 .78rem Inter, system-ui, sans-serif";
+      label.textContent = "Wallet evaluada: ";
+      const code = document.createElement("span");
+      code.textContent = address;
+      const link = document.createElement("a");
+      link.className = "explorer";
+      link.href = `https://tronscan.org/#/address/${address}`;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "Ver en Tronscan ↗";
+      target.append(label, code, document.createElement("br"), link);
+    }
+
     function renderTruth(data) {
       const card = $("#truthCard");
       const demo = data.demo;
@@ -454,7 +476,7 @@
       const threshold = thresholdValue();
 
       $("#resultEyebrow").textContent = data.demo ? "Resultado · ejemplo de demostración" : "Resultado de evaluación";
-      $("#resultAddress").textContent = data.address || "—";
+      renderAddress(data.address);
       const badge = $("#riskBadge");
       badge.textContent = `BANDA PERCENTIL · ${percentileBand(level)}`;
       badge.style.color = color; badge.style.borderColor = color; badge.style.background = `${color}16`;
@@ -547,7 +569,8 @@
       if (row && event.key === "Enter") renderResult(history[Number(row.dataset.index)].data);
     });
 
-    async function callApi(path, options, origin) {
+    async function callApi(path, options, origin, address) {
+      $("#loadingWallet").textContent = address ? `Wallet: ${address}` : "";
       setBusy(true);
       try {
         const response = await fetch(`${API}${path}`, options);
@@ -555,7 +578,7 @@
         try { data = await response.json(); } catch { data = {}; }
         if (!response.ok) {
           const [title, detail] = friendlyError(response.status, data);
-          const context = data.demo ? ` Ejemplo: ${data.demo.title}.` : "";
+          const context = data.demo ? ` Ejemplo: ${data.demo.title} · wallet ${data.demo.address}.` : "";
           showError(title, detail + context);
           return;
         }
@@ -572,10 +595,11 @@
       }
     }
 
+    let exampleAddresses = {};
     function runExample(id) {
       return callApi("/demo/score", {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ exampleId: id }),
-      }, "Ejemplo");
+      }, "Ejemplo", exampleAddresses[id]);
     }
 
     async function loadExamples() {
@@ -586,18 +610,23 @@
         const { examples } = await response.json();
         container.replaceChildren();
         examples.forEach((example) => {
+          exampleAddresses[example.id] = example.address;
           const button = document.createElement("button");
           button.type = "button";
           button.className = "example";
           button.dataset.id = example.id;
-          const tag = document.createElement("span");
-          tag.className = "tag";
-          tag.textContent = example.addressMasked;
           const title = document.createElement("strong");
           title.textContent = example.title;
           const description = document.createElement("span");
           description.textContent = example.description;
-          button.append(tag, title, description);
+          const address = document.createElement("span");
+          address.className = "addr";
+          address.textContent = example.address;
+          const date = document.createElement("span");
+          date.className = "date";
+          date.textContent = `Evaluada al ${new Date(example.asOf).toLocaleString("es-EC", { dateStyle: "medium", timeStyle: "short" })}`;
+          button.setAttribute("aria-label", `${example.title}. Wallet ${example.address}`);
+          button.append(title, description, address, date);
           button.addEventListener("click", () => runExample(example.id));
           container.append(button);
         });
@@ -669,7 +698,7 @@
       button.innerHTML = '<span class="spinner" aria-hidden="true"></span>Consultando…';
       await callApi("/v1/score/wallet/shadow/live", {
         method: "POST", headers: { "content-type": "application/json", "x-api-key": apiKey }, body: JSON.stringify({ address }),
-      }, "Con clave");
+      }, "Con clave", address);
       button.disabled = false;
       button.textContent = "Evaluar wallet";
     });
