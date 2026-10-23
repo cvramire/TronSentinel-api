@@ -187,9 +187,12 @@ métricas o la velocidad de lanzamiento.
 
 ## Referencias
 
-* Asamblea Nacional del Ecuador (2021). *Ley Orgánica de Protección de Datos Personales.* R.O. 5.º Supl. 459.
-* Asamblea Nacional del Ecuador (2024). *Ley Orgánica de Prevención, Detección y Combate del Delito de Lavado de Activos y de la Financiación de Otros Delitos.* R.O. 4.º Supl. 610.
-* Superintendencia de Protección de Datos Personales (2026). Resoluciones SPDP-SPD-2026-0009-R, 0037-R y 0040-R.
-* National Institute of Standards and Technology (2023). *AI Risk Management Framework (AI RMF 1.0).* NIST AI 100-1.
-* OECD. *Recommendation of the Council on Artificial Intelligence.* https://oecd.ai/en/ai-principles
-* Mitchell, M. et al. (2019). *Model Cards for Model Reporting.* FAT* '19.
+1. Asamblea Nacional del Ecuador. (2021, 26 de mayo). *Ley Orgánica de Protección de Datos Personales*. Registro Oficial, Quinto Suplemento No. 459.
+2. Asamblea Nacional del Ecuador. (2024, 29 de julio). *Ley Orgánica de Prevención, Detección y Combate del Delito de Lavado de Activos y de la Financiación de Otros Delitos*. Registro Oficial, Cuarto Suplemento No. 610 (texto consolidado con reformas a octubre de 2025). https://www.uafe.gob.ec/wp-content/uploads/2025/10/A1-LEY-LAVADO_-OCTUBRE_-2025.pdf
+3. Banco Central del Ecuador. (2024, 12 de agosto). *Comunicado sobre el uso de criptoactivos como medio de pago*. https://dplnews.com/?p=245377
+4. Mitchell, M., Wu, S., Zaldivar, A., Barnes, P., Vasserman, L., Hutchinson, B., Spitzer, E., Raji, I. D., & Gebru, T. (2019). Model cards for model reporting. *Proceedings of the Conference on Fairness, Accountability, and Transparency (FAT\* '19)*.
+5. National Institute of Standards and Technology. (2023). *Artificial Intelligence Risk Management Framework (AI RMF 1.0)* (NIST AI 100-1). https://doi.org/10.6028/NIST.AI.100-1
+6. OECD. (s. f.). *Recommendation of the Council on Artificial Intelligence*. https://oecd.ai/en/ai-principles
+7. Superintendencia de Protección de Datos Personales. (2026a). *Norma General para la Garantía del Derecho de Protección de Datos Personales en el Uso de Sistemas de Inteligencia Artificial* (Res. SPDP-SPD-2026-0009-R). Registro Oficial No. 240, 10 de marzo de 2026.
+8. Superintendencia de Protección de Datos Personales. (2026b, 9 de septiembre). *Reforma a la Norma General… en el Uso de Sistemas de Inteligencia Artificial* (Res. SPDP-SPD-2026-0037-R). https://spdp.gob.ec/resoluciones2/
+9. Superintendencia de Protección de Datos Personales. (2026c, 9 de septiembre). *Norma Técnica de Notificaciones de Vulneraciones de la Seguridad de los Datos Personales* (Res. SPDP-SPD-2026-0040-R). https://spdp.gob.ec/resoluciones2/
