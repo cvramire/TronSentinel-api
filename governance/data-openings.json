@@ -41,6 +41,16 @@
       "purpose": "Archivo fuente de controles del holdout externo v0.6.1 (fileHashes.controlHoldout del manifiesto de congelamiento).",
       "openedBy": "evaluación externa v0.6.1",
       "reusableForSelection": false
+    },
+    {
+      "openedAtUtc": "2026-10-23T12:51:48.410302+00:00",
+      "reusableForSelection": false,
+      "partition": "internal-test",
+      "datasetHash": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad",
+      "openedFor": "tronsentinel-onchain-riskset-v0.7.0-20261023",
+      "modelHash": "59930ec84472fffab5ac282dc611c47896904b395320f84a8bdde3c1f42c338c",
+      "purpose": "Confirmación interna tronsentinel-onchain-riskset-v0.7.0-20261023 (sin daysSinceLastTransfer)",
+      "openedBy": "confirm-onchain-test.py"
     }
   ]
 }
