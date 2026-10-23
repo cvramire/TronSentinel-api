@@ -99,3 +99,18 @@ ciclo v7 (rechazado) y al rediseño del muestreo para v8.
 | Exposición de la clave de la API | Media | Medio | Solo se guarda el SHA-256; la clave se entrega en privado; demo sin clave limitada a 5 ejemplos | Controlado |
 | Costos de cloud | Baja | Medio | `maxInstances` 1, caché de 6 h en la demo, límite por IP | Controlado |
 | Retrasos del cronograma | Media | Medio | Priorizar el pipeline de datos; documentar cada ciclo | Ocurrió en datos; recuperado |
+
+## 7. Metodología
+
+Trabajamos con un diseño caso-control con conjuntos de riesgo (risk set): cada wallet marcada como caso se compara con controles tomados entre wallets activas en el mismo momento de corte. De cada wallet calculamos 38 variables sobre una ventana de 90 días de transferencias USDT/TUSD en la red TRON.
+
+Como modelo usamos un único clasificador de gradient boosting de 150 árboles de profundidad 1 (stumps), con tasa de aprendizaje 0,04, calibrado con Platt scaling sobre la partición de validación. Elegimos esta familia porque cada variable aporta una contribución separable al score, lo que nos permite explicar cada resultado a una persona revisora. El umbral de revisión (0,4289) lo fijamos en validación, maximizando F1 con una tasa de falsos positivos de a lo sumo 5 %.
+
+Para validar seguimos estas reglas:
+
+- **Particiones por grupo:** un caso y sus controles nunca quedan repartidos entre entrenamiento, validación y prueba, para evitar fuga de información.
+- **Optimización sin tocar el holdout:** la búsqueda de hiperparámetros con Optuna se hizo con validación cruzada agrupada sobre entrenamiento.
+- **Holdout de una sola apertura:** el conjunto externo (286 wallets) se abrió una única vez, al final.
+- **Métricas:** PR-AUC como métrica principal, junto con recall y tasa de falsos positivos con intervalos de confianza de Wilson, comparados contra un baseline dummy y una regresión logística.
+
+**Limitación metodológica:** los controles se eligieron entre wallets con actividad muy reciente, lo que infla la señal de la variable `daysSinceLastTransfer`. Por eso tratamos las métricas reportadas como una cota superior optimista y no como el desempeño esperado en producción.
