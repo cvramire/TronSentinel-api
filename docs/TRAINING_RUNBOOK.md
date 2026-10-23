@@ -56,14 +56,16 @@ export LABELS=$DATA/blacklist-final-$V/blacklist-label-events-final.csv
 
 ### 1.2 Cohorte de positivos posteriores al 9 de junio de 2026
 
-La fecha de corte debe dejar al menos 30 días de seguimiento (por ejemplo, `2026-09-20T00:00:00Z`).
+Los controles salen del risk set en la Fase 2, así que la cohorte contiene solo positivos y no necesita archivo de eventos. La fecha índice es la primera inclusión conocida de cada dirección, y quedan excluidas las direcciones usadas en cohortes anteriores.
 
 ```bash
-npm run onchain:cohort -- \
+npm run onchain:cohort:positives -- \
   --labels $LABELS \
-  --events <archivo de eventos usado en la cohorte v1> \
   --from 2026-06-10T00:00:00Z --to 2026-09-20T00:00:00Z \
-  --seed tronsentinel-onchain-$V \
+  --positive-limit 700 --seed tronsentinel-onchain-$V \
+  --exclude $DATA/tronsentinel-onchain-cohort-v1/onchain-cohort.csv \
+  --exclude $DATA/onchain-risk-set-v6-development-dataset/onchain-feature-dataset.csv \
+  --exclude $DATA/onchain-model-risk-set-v0.6.1-external-holdout/external-holdout-dataset.csv \
   --output-dir $DATA/tronsentinel-onchain-cohort-$V
 ```
 

@@ -27,6 +27,7 @@
     "dataset:validate-labels": "node scripts/validate-labeled-dataset.mjs",
     "test:labeling": "node --test scripts/label-point-in-time-snapshots.test.mjs",
     "onchain:cohort": "node scripts/prepare-onchain-cohort.mjs",
+    "onchain:cohort:positives": "python3 scripts/prepare-positive-cohort.py",
     "onchain:history": "node scripts/fetch-onchain-history.mjs",
     "onchain:consolidate": "node --max-old-space-size=4096 scripts/consolidate-onchain-history.mjs",
     "onchain:features": "node --max-old-space-size=4096 scripts/build-onchain-features.mjs",
