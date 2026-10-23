@@ -25,6 +25,8 @@ function parseArgs(argv) {
     delayMs: 100,
     maxRetries: 6,
     seed: "tronsentinel-risk-set-v5",
+    activityAnchor: "index",
+    anchorMaxDays: 90,
     excludes: [],
     dryRun: false,
   };
@@ -43,6 +45,8 @@ function parseArgs(argv) {
     else if (arg === "--delay-ms") options.delayMs = Number(argv[++index]);
     else if (arg === "--max-retries") options.maxRetries = Number(argv[++index]);
     else if (arg === "--seed") options.seed = argv[++index];
+    else if (arg === "--activity-anchor") options.activityAnchor = argv[++index];
+    else if (arg === "--anchor-max-days") options.anchorMaxDays = Number(argv[++index]);
     else if (arg === "--dry-run") options.dryRun = true;
     else if (arg === "--help") options.help = true;
     else throw new Error(`UNKNOWN_ARGUMENT:${arg}`);
@@ -68,6 +72,11 @@ Opciones del piloto:
   --delay-ms 100
   --max-retries 6
   --seed tronsentinel-risk-set-v5
+  --activity-anchor index|random-lookback
+      index (v5, por defecto): controles activos en los window-seconds previos a la fecha índice.
+      random-lookback (v6): cada control se busca activo en un instante aleatorio y determinista
+      dentro de los anchor-max-days previos; evita que daysSinceLastTransfer sea ~0 por construcción.
+  --anchor-max-days 90
   --dry-run
 
 Requiere APP_TRONGRID_API_KEY o TRONGRID_API_KEY.
@@ -203,9 +212,11 @@ async function requestJson(url, apiKey, maxRetries) {
   }
 }
 
-async function fetchCandidates({caseMs, apiKey, options, stats}) {
+async function fetchCandidates({caseMs, anchorMs = caseMs, apiKey, options, stats}) {
   const candidates = new Map();
-  const minMs = caseMs - options.windowSeconds * 1000;
+  if (anchorMs > caseMs) throw new Error("ANCHOR_AFTER_CASE_INDEX");
+  const maxMs = anchorMs;
+  const minMs = maxMs - options.windowSeconds * 1000;
   for (const contract of CONTRACTS) {
     let fingerprint;
     for (let page = 0; page < options.pagesPerContract; page += 1) {
@@ -215,7 +226,7 @@ async function fetchCandidates({caseMs, apiKey, options, stats}) {
       url.searchParams.set("limit", String(options.pageSize));
       url.searchParams.set("order_by", "block_timestamp,desc");
       url.searchParams.set("min_block_timestamp", String(minMs));
-      url.searchParams.set("max_block_timestamp", String(caseMs));
+      url.searchParams.set("max_block_timestamp", String(maxMs));
       if (fingerprint) url.searchParams.set("fingerprint", fingerprint);
       const body = await requestJson(url, apiKey, options.maxRetries);
       const events = body.data || [];
@@ -223,7 +234,7 @@ async function fetchCandidates({caseMs, apiKey, options, stats}) {
       stats.events += events.length;
       for (const event of events) {
         const eventMs = Number(event.block_timestamp);
-        if (!Number.isFinite(eventMs) || eventMs > caseMs || eventMs < minMs) {
+        if (!Number.isFinite(eventMs) || eventMs > maxMs || eventMs < minMs) {
           stats.outOfWindowEvents += 1;
           continue;
         }
@@ -306,6 +317,8 @@ async function main() {
   assertInteger(options.pagesPerContract, "PAGES_PER_CONTRACT", 1, 50);
   assertInteger(options.delayMs, "DELAY_MS", 0, 60_000);
   assertInteger(options.maxRetries, "MAX_RETRIES", 0, 20);
+  assertInteger(options.anchorMaxDays, "ANCHOR_MAX_DAYS", 1, 365);
+  if (!["index", "random-lookback"].includes(options.activityAnchor)) throw new Error("ACTIVITY_ANCHOR_INVALID");
 
   const outputDir = path.resolve(options.outputDir);
   try { await fsp.access(outputDir); throw new Error(`OUTPUT_ALREADY_EXISTS:${outputDir}`); }
@@ -330,7 +343,11 @@ async function main() {
   const plan = {
     ok: true,
     dryRun: options.dryRun,
-    design: "active-wallet-risk-set-immediately-before-case-index-v5",
+    design: options.activityAnchor === "index"
+      ? "active-wallet-risk-set-immediately-before-case-index-v5"
+      : "active-wallet-risk-set-random-lookback-anchor-v6",
+    activityAnchor: options.activityAnchor,
+    anchorMaxDays: options.activityAnchor === "index" ? null : options.anchorMaxDays,
     sourceCases: uniqueCases.length,
     selectedCases: selectedCases.length,
     developmentPerCase: options.developmentPerCase,
@@ -364,12 +381,33 @@ async function main() {
   for (let index = 0; index < selectedCases.length; index += 1) {
     const caseRow = selectedCases[index];
     const caseMs = Date.parse(caseRow.indexAtUtc);
-    const rawCandidates = await fetchCandidates({caseMs, apiKey, options, stats});
-    const eligible = rawCandidates
-      .filter((candidate) => !excluded.has(candidate.address) && !used.has(candidate.address))
-      .sort((a, b) => sha256Text(`${options.seed}|${caseRow.cohortId}|${a.address}`)
-        .localeCompare(sha256Text(`${options.seed}|${caseRow.cohortId}|${b.address}`)));
-    const chosen = eligible.slice(0, required);
+    const order = (a, b) => sha256Text(`${options.seed}|${caseRow.cohortId}|${a.address}`)
+      .localeCompare(sha256Text(`${options.seed}|${caseRow.cohortId}|${b.address}`));
+    let chosen = [];
+    let rawCount = 0;
+    let eligibleCount = 0;
+    if (options.activityAnchor === "index") {
+      const rawCandidates = await fetchCandidates({caseMs, apiKey, options, stats});
+      const eligible = rawCandidates
+        .filter((candidate) => !excluded.has(candidate.address) && !used.has(candidate.address))
+        .sort(order);
+      chosen = eligible.slice(0, required).map((candidate) => ({...candidate, anchorAtUtc: new Date(caseMs).toISOString()}));
+      rawCount = rawCandidates.length;
+      eligibleCount = eligible.length;
+    } else {
+      for (let slot = 0; slot < required; slot += 1) {
+        const fraction = parseInt(sha256Text(`${options.seed}|${caseRow.cohortId}|anchor|${slot}`).slice(0, 12), 16) / 2 ** 48;
+        const anchorMs = caseMs - Math.floor(fraction * options.anchorMaxDays * 86_400_000);
+        const rawCandidates = await fetchCandidates({caseMs, anchorMs, apiKey, options, stats});
+        const taken = new Set(chosen.map((candidate) => candidate.address));
+        const eligible = rawCandidates
+          .filter((candidate) => !excluded.has(candidate.address) && !used.has(candidate.address) && !taken.has(candidate.address))
+          .sort(order);
+        rawCount += rawCandidates.length;
+        eligibleCount += eligible.length;
+        if (eligible.length) chosen.push({...eligible[0], anchorAtUtc: new Date(anchorMs).toISOString()});
+      }
+    }
     if (chosen.length < required) {
       shortfalls.push({caseId: caseRow.cohortId, address: caseRow.address, required, available: chosen.length});
     }
@@ -389,12 +427,13 @@ async function main() {
         activeEventAtUtc: candidate.eventAtUtc,
         activeToken: candidate.token,
         evidenceRef: candidate.evidenceRef,
-        candidateCountBeforeExclusions: rawCandidates.length,
-        eligibleCandidateCount: eligible.length,
+        anchorAtUtc: candidate.anchorAtUtc,
+        candidateCountBeforeExclusions: rawCount,
+        eligibleCandidateCount: eligibleCount,
       });
     });
     process.stderr.write(
-      `${index + 1}/${selectedCases.length} ${caseRow.cohortId} candidates=${rawCandidates.length} eligible=${eligible.length} selected=${chosen.length}\n`,
+      `${index + 1}/${selectedCases.length} ${caseRow.cohortId} candidates=${rawCount} eligible=${eligibleCount} selected=${chosen.length}\n`,
     );
   }
 

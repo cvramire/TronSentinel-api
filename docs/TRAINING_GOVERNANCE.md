@@ -95,6 +95,37 @@ La referencia de las diferencias pareadas es la configuración desplegada. El ar
 
 Ninguno puede usarse para escoger 150 frente a 914 estimadores, ajustar profundidad, modificar el umbral, seleccionar regularización ni recalibrar percentiles. Un candidato entrenado sobre el mismo dataset de desarrollo no puede confirmarse en ese test. Necesita un dataset de desarrollo nuevo (nuevo hash) o, como mínimo, una cohorte temporal externa nueva.
 
+## 8. Calendario de reentrenamiento
+
+### Cadencia base: un ciclo por trimestre
+
+| Restricción | Por qué |
+|---|---|
+| Unos 700 positivos nuevos por ciclo | La blacklist suma ~250–500 inclusiones (ADD) por mes; un trimestre alcanza con margen, y menos de dos meses no. |
+| 30 días de seguimiento después de la fecha de corte | Los controles necesitan tiempo para confirmar que no fueron incluidos después. |
+| Cada ciclo consume un test y un holdout | Entrenar más seguido agota cohortes nuevas sin ganar evidencia. |
+
+| Ciclo | Casos (primera inclusión) | Inicio del trabajo |
+|---|---|---|
+| v8 | 2026-09-21 → 2026-12-20 | ~2027-01-20 |
+| v9 | 2026-12-21 → 2027-03-20 | ~2027-04-20 |
+| v10 | 2027-03-21 → 2027-06-20 | ~2027-07-20 |
+
+Un ciclo **no implica** promoción. El candidato reemplaza al modelo en SHADOW solo si aprueba el test interno y el holdout externo.
+
+### Disparadores fuera de calendario
+
+Cualquiera de estos adelanta el siguiente ciclo, sin saltarse ninguna fase:
+
+1. **Drift de variables:** PSI > 0,25 en alguna de las 5 variables más importantes, comparando las evaluaciones SHADOW del último mes (`ts_predictions`) con la referencia de entrenamiento.
+2. **Drift del score:** la mediana del percentil en SHADOW se desplaza más de 15 puntos durante dos meses seguidos.
+3. **Retroalimentación de etiquetas:** de las wallets evaluadas en SHADOW que luego entran a la blacklist, menos del 50 % estaban sobre el umbral en su última evaluación previa (mínimo 30 casos).
+4. **Cambios de fuente:** cambios en TronGrid/TRONSCAN, en la política de congelamiento de Tether o en los contratos cubiertos.
+
+### Regla de estancamiento
+
+Si **dos ciclos seguidos** fallan el test interno o el holdout externo, no se inicia un tercero con el mismo diseño. Primero se revisan las variables, el diseño de controles y los criterios de aceptación.
+
 ## Comandos
 
 Guía completa paso a paso, con todos los comandos: [`TRAINING_RUNBOOK.md`](./TRAINING_RUNBOOK.md). El ciclo exige `freeze-candidate.py` antes de abrir el test. `calibrate-onchain-score.py` ya no habilita el despliegue SHADOW; solo `seal-shadow-artifact.py` lo hace, después de aprobar el test interno y el holdout externo.

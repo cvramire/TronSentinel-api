@@ -103,6 +103,8 @@ Genera `cases-development.csv`, `cases-external.csv` y `case-split-summary.json`
 
 ### 2.1 Muestrear controles
 
+> **Desde v8, los controles se anclan a un instante aleatorio** de los 90 días previos (`--activity-anchor random-lookback`), no a los 300 segundos previos a la fecha índice. Ver `governance/cycles/v7/README.md`. Hace una consulta por control en vez de una por caso, así que tarda unas 4 veces más. Ya no hace falta `--neutralize-features daysSinceLastTransfer`; en el informe del ciclo, reporta el AUC univariado de esa variable en train.
+
 ```bash
 EXCL=(   # arreglo: zsh no separa variables de texto en argumentos
   --exclude $DATA/onchain-risk-set-v6-external-corrected-sampling-v2/risk-set-external-holdout-v5.csv
@@ -112,6 +114,7 @@ EXCL=(   # arreglo: zsh no separa variables de texto en argumentos
 npm run onchain:risk-set -- --cases $DATA/onchain-cases-$V/cases-development.csv --labels $LABELS \
   "${EXCL[@]}" --exclude $DATA/onchain-cases-$V/cases-external.csv \
   --case-limit 548 --development-per-case 4 --holdout-per-case 0 \
+  --activity-anchor random-lookback --anchor-max-days 90 \
   --seed tronsentinel-risk-set-$V-dev --output-dir $DATA/onchain-risk-set-$V-dev-sampling
 
 # Externo: 2 controles por caso. El script exige al menos 1 de desarrollo; esa fila se descarta.
@@ -119,6 +122,7 @@ npm run onchain:risk-set -- --cases $DATA/onchain-cases-$V/cases-external.csv --
   "${EXCL[@]}" --exclude $DATA/onchain-cases-$V/cases-development.csv \
   --exclude $DATA/onchain-risk-set-$V-dev-sampling/risk-set-development-controls-v5.csv \
   --case-limit 150 --development-per-case 1 --holdout-per-case 2 \
+  --activity-anchor random-lookback --anchor-max-days 90 \
   --seed tronsentinel-risk-set-$V-ext --output-dir $DATA/onchain-risk-set-$V-ext-sampling
 ```
 

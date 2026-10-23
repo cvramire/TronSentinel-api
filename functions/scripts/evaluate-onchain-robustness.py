@@ -113,8 +113,10 @@ def bootstrap_groups(frame, probabilities, threshold, repetitions, seed):
     return {name: percentile_interval(values) for name, values in results.items()}
 
 
-def train_ablation(frame, feature_names, seed):
-    selected = [name for name in feature_names if name not in MONETARY_FEATURES]
+def train_ablation(frame, feature_names, seed, neutralized=()):
+    # Las variables neutralizadas del candidato tampoco pueden entrar en la ablación;
+    # de lo contrario la comparación usaría información que el modelo evaluado no usa.
+    selected = [name for name in feature_names if name not in MONETARY_FEATURES and name not in set(neutralized)]
     x = frame[selected].to_numpy(dtype=np.float64)
     y = frame["target"].to_numpy(dtype=np.int8)
     masks = {name: frame["datasetSplit"].eq(name).to_numpy() for name in ("train", "validation", "test")}
@@ -140,6 +142,7 @@ def train_ablation(frame, feature_names, seed):
     importances = sorted(zip(selected, classifier.feature_importances_), key=lambda item: item[1], reverse=True)
     return {
         "excludedFeatures": sorted(MONETARY_FEATURES),
+        "neutralizedFeaturesAlsoExcluded": sorted(neutralized),
         "featureCount": len(selected),
         "threshold": threshold,
         "validation": full_metrics(y[masks["validation"]], probabilities["validation"], threshold),
@@ -170,7 +173,8 @@ def main():
     test_probabilities = probabilities[test_mask]
     clean_test = full_metrics(test["target"].to_numpy(dtype=np.int8), test_probabilities, threshold)
     bootstrap = bootstrap_groups(test, test_probabilities, threshold, args.bootstrap, args.seed)
-    ablation = train_ablation(dataset, feature_names, args.seed)
+    neutralized = (model.get("hyperparameters") or {}).get("neutralizedFeatures") or []
+    ablation = train_ablation(dataset, feature_names, args.seed, neutralized)
 
     stress = {
         "available": False,
