@@ -1,0 +1,1085 @@
+{
+  "modelVersion": "tronsentinel-onchain-riskset-v0.6.1-20260928",
+  "status": "CHALLENGER",
+  "algorithm": "gradient_boosted_stumps_v1",
+  "featureSetVersion": "tron-wallet-onchain-1.0.0",
+  "studyDesign": "matched-case-control",
+  "featureNames": [
+    "transferCount",
+    "transactionCount",
+    "activeDays",
+    "activeDayRatio",
+    "averageDailyTransfers",
+    "inboundCount",
+    "outboundCount",
+    "inboundRatio",
+    "outboundRatio",
+    "totalAmount",
+    "inboundAmount",
+    "outboundAmount",
+    "netFlowAmount",
+    "meanAmount",
+    "amountStd",
+    "amountCv",
+    "maxAmount",
+    "uniqueCounterparties",
+    "uniqueInboundCounterparties",
+    "uniqueOutboundCounterparties",
+    "repeatedCounterpartyRatio",
+    "topCounterpartyShare",
+    "counterpartyHhi",
+    "counterpartyEntropy",
+    "inboundTopCounterpartyShare",
+    "outboundTopCounterpartyShare",
+    "selfTransferCount",
+    "selfTransferRatio",
+    "usdtTransferCount",
+    "tusdTransferCount",
+    "usdtAmount",
+    "tusdAmount",
+    "meanInterEventSeconds",
+    "interEventStdSeconds",
+    "interEventCv",
+    "burstiness",
+    "observedSpanDays",
+    "daysSinceLastTransfer"
+  ],
+  "baseLogit": 1.4210854715202004e-14,
+  "learningRate": 0.04,
+  "stumps": [
+    {
+      "feature": "meanAmount",
+      "threshold": 8202.65966796875,
+      "leftValue": -1.2743477978010682,
+      "rightValue": 1.483690641407608
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.028628472238779068,
+      "leftValue": -1.6024736058220923,
+      "rightValue": 1.1969345847139699
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.06060763821005821,
+      "leftValue": -1.3901790322604177,
+      "rightValue": 1.1631390542347497
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 10252.71044921875,
+      "leftValue": -1.0685053356197853,
+      "rightValue": 1.480298706982975
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.09993055462837219,
+      "leftValue": -1.414861131893949,
+      "rightValue": 1.165725721442782
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 8551.23046875,
+      "leftValue": -1.103722304461904,
+      "rightValue": 1.3111761209142703
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.028420139104127884,
+      "leftValue": -1.398283023725357,
+      "rightValue": 0.9624575965974098
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.028420139104127884,
+      "leftValue": -1.3801518468311555,
+      "rightValue": 0.9577841320549613
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 8551.23046875,
+      "leftValue": -1.0031020453631776,
+      "rightValue": 1.215250997171757
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 10474.81298828125,
+      "leftValue": -0.9729526010730483,
+      "rightValue": 1.2171577220462326
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.10255208238959312,
+      "leftValue": -1.1043409205657464,
+      "rightValue": 1.0412763757226517
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.014149305876344442,
+      "leftValue": -1.408339068567209,
+      "rightValue": 0.8632877455572243
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 4974.59619140625,
+      "leftValue": -1.0998506774574612,
+      "rightValue": 1.0415098432214611
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 8202.65966796875,
+      "leftValue": -0.9950301420108157,
+      "rightValue": 1.0846913677229992
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.07052083313465118,
+      "leftValue": -1.2262044311425149,
+      "rightValue": 0.9322285440193103
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 8551.23046875,
+      "leftValue": -0.8524896463166423,
+      "rightValue": 1.0604144688608743
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 10942.51953125,
+      "leftValue": -0.8847133132783793,
+      "rightValue": 1.0780255871664148
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.01164930546656251,
+      "leftValue": -1.2724377164705236,
+      "rightValue": 0.7122911686593184
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.007447916781529784,
+      "leftValue": -1.3301963058729576,
+      "rightValue": 0.6503915258017728
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.9396444859846732,
+      "rightValue": 0.9077235477849667
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 7208.394775390625,
+      "leftValue": -0.8604155753249937,
+      "rightValue": 0.92137621720442
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.009149305522441864,
+      "leftValue": -1.1908589369416345,
+      "rightValue": 0.6576991019432114
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 5667.28271484375,
+      "leftValue": -0.8468626582506272,
+      "rightValue": 0.8853748183023482
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12654513865709305,
+      "leftValue": -0.9318622641069085,
+      "rightValue": 0.7879600696735507
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0073958332650363445,
+      "leftValue": -1.282054957778232,
+      "rightValue": 0.6496044664285887
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1863.7604370117188,
+      "leftValue": -1.146801918624748,
+      "rightValue": 0.646913397085122
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 12642.205078125,
+      "leftValue": -0.6439185486692127,
+      "rightValue": 1.029946383080376
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1854.02099609375,
+      "leftValue": -1.1009846958741918,
+      "rightValue": 0.5717134107682411
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0021006944589316845,
+      "leftValue": -1.2778760893302317,
+      "rightValue": 0.515062342026408
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.06060763821005821,
+      "leftValue": -0.8883348475410142,
+      "rightValue": 0.6943679167347654
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.8612664635608296,
+      "rightValue": 0.7661057957048208
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 10474.81298828125,
+      "leftValue": -0.6103911383032755,
+      "rightValue": 0.9309890038566935
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1863.7604370117188,
+      "leftValue": -1.0436021839573313,
+      "rightValue": 0.549935832736114
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.06756944581866264,
+      "leftValue": -0.8735227643794422,
+      "rightValue": 0.646045525440762
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -1.245277663052616,
+      "rightValue": 0.5003576422291973
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.09906249865889549,
+      "leftValue": -0.8751632505607588,
+      "rightValue": 0.621812909844203
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.014149305876344442,
+      "leftValue": -1.006293118118885,
+      "rightValue": 0.5891509855252294
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 2270.0623779296875,
+      "leftValue": -0.8606683663402633,
+      "rightValue": 0.590560848229685
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24906.9423828125,
+      "leftValue": -0.6004625805794711,
+      "rightValue": 1.0955877241421035
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.027881944552063942,
+      "leftValue": -1.0117480348441166,
+      "rightValue": 0.5369432102525306
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 7208.394775390625,
+      "leftValue": -0.6167581359935369,
+      "rightValue": 0.7492016917797046
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 2270.0623779296875,
+      "leftValue": -0.9695493543067422,
+      "rightValue": 0.5278244569456448
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1863.7604370117188,
+      "leftValue": -0.9433671339744287,
+      "rightValue": 0.5133971386756131
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 8551.23046875,
+      "leftValue": -0.5817597981086872,
+      "rightValue": 0.7588289377767528
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.007447916781529784,
+      "leftValue": -1.1278144700704456,
+      "rightValue": 0.49608677485541625
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 12642.205078125,
+      "leftValue": -0.5121334039635648,
+      "rightValue": 0.792051423415551
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12098958343267441,
+      "leftValue": -0.6906913859296293,
+      "rightValue": 0.6471973518365342
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 10942.51953125,
+      "leftValue": -0.5264715709095037,
+      "rightValue": 0.7566618322136252
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -1.1941552770232526,
+      "rightValue": 0.3711943264629404
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.6900656819343567,
+      "leftValue": 0.5069263176776433,
+      "rightValue": -0.8194257472998077
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.6053618667463876,
+      "rightValue": 0.6582721781322544
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.028420139104127884,
+      "leftValue": -0.9078215262757031,
+      "rightValue": 0.49102055763077673
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -1.1454779824897061,
+      "rightValue": 0.45467480614955336
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.755034476518631,
+      "leftValue": 0.39823430872421317,
+      "rightValue": -0.9622883075835467
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 25050.267578125,
+      "leftValue": -0.4179638262284412,
+      "rightValue": 0.9809927064838061
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1863.7604370117188,
+      "leftValue": -0.913766625657272,
+      "rightValue": 0.48921076402001745
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1523.3648071289062,
+      "leftValue": -0.8285421669084782,
+      "rightValue": 0.40903385203105386
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.6191889022595843,
+      "rightValue": 0.5424296642426248
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 2270.0623779296875,
+      "leftValue": -0.8145216944529738,
+      "rightValue": 0.4302020315119385
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.015607639215886593,
+      "leftValue": -0.8436793671440594,
+      "rightValue": 0.4435670260320096
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -1.12385610823888,
+      "rightValue": 0.30024008399070207
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.755034476518631,
+      "leftValue": 0.3509669680313957,
+      "rightValue": -0.9815704069303107
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 2813.8494873046875,
+      "leftValue": -0.6685217173198588,
+      "rightValue": 0.49123233181974224
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 8220.699951171875,
+      "leftValue": -0.9116683448668622,
+      "rightValue": 0.36461759862472637
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24917.7841796875,
+      "leftValue": -0.41360296717649764,
+      "rightValue": 0.8659164183415358
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24906.9423828125,
+      "leftValue": -0.46306470830360763,
+      "rightValue": 0.8857973311176155
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1863.7604370117188,
+      "leftValue": -0.909664406902126,
+      "rightValue": 0.42455427198914686
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.7230277061462402,
+      "leftValue": 0.4097505457102314,
+      "rightValue": -0.9003535520509931
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0020138889085501432,
+      "leftValue": -1.1151634239830142,
+      "rightValue": 0.33564517990266385
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.755034476518631,
+      "leftValue": 0.3621830132740349,
+      "rightValue": -0.8770219658155283
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.7252580523490906,
+      "leftValue": 0.37986936521882864,
+      "rightValue": -0.8757566474602431
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.755034476518631,
+      "leftValue": 0.27963469303023053,
+      "rightValue": -0.8562943308571129
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1523.3648071289062,
+      "leftValue": -0.7916027883284564,
+      "rightValue": 0.3798306374132043
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -1.0822820072301225,
+      "rightValue": 0.38228366482158227
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.5890959306520538,
+      "rightValue": 0.4377761303871947
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.5801602179399112,
+      "rightValue": 0.5298986819633703
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 992.6400451660156,
+      "leftValue": -0.8960732975167289,
+      "rightValue": 0.3556029741453991
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24906.9423828125,
+      "leftValue": -0.341850346043841,
+      "rightValue": 0.8011523553785349
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.755034476518631,
+      "leftValue": 0.30940744137317366,
+      "rightValue": -0.8688800885591496
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -1.139097596510298,
+      "rightValue": 0.2730998190572254
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0019965278333984315,
+      "leftValue": -1.000819193007958,
+      "rightValue": 0.3319573518602728
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.612953531258235,
+      "rightValue": 0.3974328834108786
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24906.9423828125,
+      "leftValue": -0.3617064696693252,
+      "rightValue": 0.8003713357720541
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 992.6400451660156,
+      "leftValue": -0.7858786762585971,
+      "rightValue": 0.3493589535961277
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.8166539371013641,
+      "leftValue": 0.2631362545802952,
+      "rightValue": -1.0612756541330226
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 991.2141418457031,
+      "leftValue": -0.8869248245379326,
+      "rightValue": 0.28967834172163
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 8220.699951171875,
+      "leftValue": -0.8145650951660601,
+      "rightValue": 0.31946680883856593
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -0.9670627234963497,
+      "rightValue": 0.34942102735864156
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 577.906494140625,
+      "leftValue": -0.8710646089109063,
+      "rightValue": 0.2945151663559355
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.755034476518631,
+      "leftValue": 0.31256661489047916,
+      "rightValue": -0.8948053919945215
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.7246139347553253,
+      "leftValue": 0.2907816857732803,
+      "rightValue": -0.7716743854491589
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.6900656819343567,
+      "leftValue": 0.40528703114616554,
+      "rightValue": -0.5932022750623283
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.8332965672016144,
+      "leftValue": 0.25693848891158794,
+      "rightValue": -0.9383080016476868
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 15991.83056640625,
+      "leftValue": -0.5973334637653084,
+      "rightValue": 0.3437948133901004
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0020138889085501432,
+      "leftValue": -1.0355295146811945,
+      "rightValue": 0.312111168478165
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 58712.76171875,
+      "leftValue": -0.27872798706725305,
+      "rightValue": 1.0421765876461628
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.7556898593902588,
+      "leftValue": 0.24444775217273476,
+      "rightValue": -0.8543756554208192
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 992.6400451660156,
+      "leftValue": -0.774293065784989,
+      "rightValue": 0.3058264278265625
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.09906249865889549,
+      "leftValue": -0.5471604626106797,
+      "rightValue": 0.3703055152267502
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24906.9423828125,
+      "leftValue": -0.32042873874587113,
+      "rightValue": 0.7394118098292686
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -0.9462838955053843,
+      "rightValue": 0.29696381656744103
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 992.6400451660156,
+      "leftValue": -0.8104395563988451,
+      "rightValue": 0.25120640031093666
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.8332965672016144,
+      "leftValue": 0.2383247298255656,
+      "rightValue": -1.0146727122197738
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 16361.20263671875,
+      "leftValue": -0.335197109540767,
+      "rightValue": 0.6213918553517352
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 14044.0,
+      "leftValue": -0.6642578277206012,
+      "rightValue": 0.26936125868433436
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.39633679389953613,
+      "leftValue": -0.4377257217794932,
+      "rightValue": 0.46304966184205715
+    },
+    {
+      "feature": "inboundCount",
+      "threshold": 21.5,
+      "leftValue": 0.49153101100158847,
+      "rightValue": -0.5195622770918434
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1844.8367309570312,
+      "leftValue": -0.7504838280133282,
+      "rightValue": 0.2614998432661218
+    },
+    {
+      "feature": "inboundCount",
+      "threshold": 21.5,
+      "leftValue": 0.37256979575512084,
+      "rightValue": -0.4792932994857271
+    },
+    {
+      "feature": "netFlowAmount",
+      "threshold": 31529.2216796875,
+      "leftValue": -0.2140366770296382,
+      "rightValue": 0.7024450102139684
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 25719.3115234375,
+      "leftValue": -0.5825513388914935,
+      "rightValue": 0.2817915785371678
+    },
+    {
+      "feature": "inboundCount",
+      "threshold": 21.5,
+      "leftValue": 0.47551081916726406,
+      "rightValue": -0.4845830050719247
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 4231.099609375,
+      "leftValue": -0.7221993947942769,
+      "rightValue": 0.23492863772774691
+    },
+    {
+      "feature": "outboundCount",
+      "threshold": 51.5,
+      "leftValue": 0.3004656969286113,
+      "rightValue": -0.7385808539439862
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -0.9303800661251579,
+      "rightValue": 0.3210558238283925
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.6900656819343567,
+      "leftValue": 0.2993760125471395,
+      "rightValue": -0.5654927966349342
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.12112847343087196,
+      "leftValue": -0.45037246782007084,
+      "rightValue": 0.3557837555967274
+    },
+    {
+      "feature": "inboundCount",
+      "threshold": 21.5,
+      "leftValue": 0.3790730276954141,
+      "rightValue": -0.4882744920882764
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1100.7197875976562,
+      "leftValue": -0.6564908696067818,
+      "rightValue": 0.2904122089545218
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1863.7604370117188,
+      "leftValue": -0.6541026987676184,
+      "rightValue": 0.26972521053190224
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.6900656819343567,
+      "leftValue": 0.4154955798657512,
+      "rightValue": -0.5644765011221085
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 578.387451171875,
+      "leftValue": -0.8623119019862909,
+      "rightValue": 0.18536229481288402
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -0.9994672557581439,
+      "rightValue": 0.2516026650558737
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 15576.4189453125,
+      "leftValue": -0.4774025563129278,
+      "rightValue": 0.3426705953722254
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 1.2035069465637207,
+      "leftValue": -0.22954202193812712,
+      "rightValue": 0.6070515097218594
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0021006944589316845,
+      "leftValue": -0.9114342441900456,
+      "rightValue": 0.2655474003268966
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.002031250041909516,
+      "leftValue": -0.8936708671537557,
+      "rightValue": 0.24619651319063912
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 1.2035069465637207,
+      "leftValue": -0.25044037338683206,
+      "rightValue": 0.5726863348369633
+    },
+    {
+      "feature": "inboundCount",
+      "threshold": 15.5,
+      "leftValue": 0.32676268687446813,
+      "rightValue": -0.40430390803169186
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 1100.7197875976562,
+      "leftValue": -0.6570639493071867,
+      "rightValue": 0.2956116417763204
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 310822.84375,
+      "leftValue": -0.0523567990592238,
+      "rightValue": 1.3449371215573638
+    },
+    {
+      "feature": "netFlowAmount",
+      "threshold": 647.1248474121094,
+      "leftValue": -0.48000106024342865,
+      "rightValue": 0.3635532001764511
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 1.2035069465637207,
+      "leftValue": -0.2131827371165207,
+      "rightValue": 0.5770451791431404
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 33783.5,
+      "leftValue": -0.33068600995880265,
+      "rightValue": 0.38939468455806986
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.7252818048000336,
+      "leftValue": 0.23063657981628904,
+      "rightValue": -0.805929604078303
+    },
+    {
+      "feature": "netFlowAmount",
+      "threshold": 684.9667663574219,
+      "leftValue": -0.47644891084339447,
+      "rightValue": 0.32000151198647636
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "threshold": 0.8166539371013641,
+      "leftValue": 0.23195667842130313,
+      "rightValue": -0.8061874377323399
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 8220.699951171875,
+      "leftValue": -0.617456095795978,
+      "rightValue": 0.2957117314238494
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 1.2035069465637207,
+      "leftValue": -0.2886864863777543,
+      "rightValue": 0.5337499754930782
+    },
+    {
+      "feature": "meanAmount",
+      "threshold": 24906.9423828125,
+      "leftValue": -0.2905885130952546,
+      "rightValue": 0.6346119367646633
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 1.2035069465637207,
+      "leftValue": -0.2719232797622414,
+      "rightValue": 0.5050854251770258
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 4237.599609375,
+      "leftValue": -0.7184638019620674,
+      "rightValue": 0.22203717533407352
+    },
+    {
+      "feature": "counterpartyEntropy",
+      "threshold": 4.752622365951538,
+      "leftValue": -0.05149194033840116,
+      "rightValue": 2.6643193451234777
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 8220.699951171875,
+      "leftValue": -0.6285558841620448,
+      "rightValue": 0.2394474365748905
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.09906249865889549,
+      "leftValue": -0.5684101904403721,
+      "rightValue": 0.2686995168507157
+    },
+    {
+      "feature": "maxAmount",
+      "threshold": 1587.230712890625,
+      "leftValue": -0.8594274152876532,
+      "rightValue": 0.18980199465417794
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "threshold": 0.0021006944589316845,
+      "leftValue": -1.0664261041601326,
+      "rightValue": 0.20585598271452665
+    },
+    {
+      "feature": "amountStd",
+      "threshold": 458454.875,
+      "leftValue": -0.1375534771683941,
+      "rightValue": 1.3745024952908416
+    },
+    {
+      "feature": "counterpartyEntropy",
+      "threshold": 4.770739793777466,
+      "leftValue": -0.018063072415572812,
+      "rightValue": 2.413380812954736
+    },
+    {
+      "feature": "observedSpanDays",
+      "threshold": 82.86994934082031,
+      "leftValue": 0.1797157973913955,
+      "rightValue": -0.7940036356539097
+    }
+  ],
+  "calibrator": {
+    "type": "platt-case-control",
+    "a": 1.848978389285129,
+    "b": -1.9442626124416174
+  },
+  "thresholds": {
+    "recallFirst": 0.14257583140498856,
+    "candidateHighControlledFpr": 0.4288828973999436,
+    "maximumValidationFpr": 0.05
+  },
+  "datasetHash": "1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585",
+  "createdAtMs": 1790604140871,
+  "metrics": {
+    "train": {
+      "rows": 1294,
+      "positives": 280,
+      "controls": 1014,
+      "samplePrevalence": 0.21638330757341576,
+      "prAuc": 0.9291121390338943,
+      "rocAuc": 0.9760848126232742,
+      "brier": 0.04943216099300191,
+      "recallFirstOperatingPoint": {
+        "threshold": 0.14257583140498856,
+        "precision": 0.7822085889570553,
+        "recall": 0.9107142857142857,
+        "f1": 0.8415841584158417,
+        "falsePositiveRate": 0.07001972386587771,
+        "confusionMatrix": {
+          "tn": 943,
+          "fp": 71,
+          "fn": 25,
+          "tp": 255
+        }
+      },
+      "controlledFprOperatingPoint": {
+        "threshold": 0.4288828973999436,
+        "precision": 0.8592592592592593,
+        "recall": 0.8285714285714286,
+        "f1": 0.8436363636363636,
+        "falsePositiveRate": 0.03747534516765286,
+        "confusionMatrix": {
+          "tn": 976,
+          "fp": 38,
+          "fn": 48,
+          "tp": 232
+        }
+      }
+    },
+    "validation": {
+      "rows": 278,
+      "positives": 60,
+      "controls": 218,
+      "samplePrevalence": 0.2158273381294964,
+      "prAuc": 0.9349587282029832,
+      "rocAuc": 0.9814220183486239,
+      "brier": 0.04247240467417194,
+      "recallFirstOperatingPoint": {
+        "threshold": 0.14257583140498856,
+        "precision": 0.7916666666666666,
+        "recall": 0.95,
+        "f1": 0.8636363636363635,
+        "falsePositiveRate": 0.06880733944954129,
+        "confusionMatrix": {
+          "tn": 203,
+          "fp": 15,
+          "fn": 3,
+          "tp": 57
+        }
+      },
+      "controlledFprOperatingPoint": {
+        "threshold": 0.4288828973999436,
+        "precision": 0.859375,
+        "recall": 0.9166666666666666,
+        "f1": 0.8870967741935484,
+        "falsePositiveRate": 0.04128440366972477,
+        "confusionMatrix": {
+          "tn": 209,
+          "fp": 9,
+          "fn": 5,
+          "tp": 55
+        }
+      }
+    },
+    "test": {
+      "rows": 282,
+      "positives": 60,
+      "controls": 222,
+      "samplePrevalence": 0.2127659574468085,
+      "prAuc": 0.8986624427613512,
+      "rocAuc": 0.96737987987988,
+      "brier": 0.05191002979512358,
+      "recallFirstOperatingPoint": {
+        "threshold": 0.14257583140498856,
+        "precision": 0.7681159420289855,
+        "recall": 0.8833333333333333,
+        "f1": 0.8217054263565893,
+        "falsePositiveRate": 0.07207207207207207,
+        "confusionMatrix": {
+          "tn": 206,
+          "fp": 16,
+          "fn": 7,
+          "tp": 53
+        }
+      },
+      "controlledFprOperatingPoint": {
+        "threshold": 0.4288828973999436,
+        "precision": 0.8596491228070176,
+        "recall": 0.8166666666666667,
+        "f1": 0.8376068376068376,
+        "falsePositiveRate": 0.036036036036036036,
+        "confusionMatrix": {
+          "tn": 214,
+          "fp": 8,
+          "fn": 11,
+          "tp": 49
+        }
+      }
+    }
+  },
+  "governance": {
+    "promotionEligible": true,
+    "decision": "APPROVED_FOR_EXTERNAL_CALIBRATION",
+    "checks": {
+      "validationRocAucAtLeast0_70": true,
+      "testRocAucAtLeast0_70": true,
+      "validationPrAucAtLeast0_50": true,
+      "testPrAucAtLeast0_50": true,
+      "validationRecallAtControlledFprAtLeast0_50": true,
+      "testRecallAtControlledFprAtLeast0_50": true,
+      "validationFalsePositiveRateAtMost0_10": true,
+      "testFalsePositiveRateAtMost0_10": true
+    },
+    "productionProbabilityReady": false
+  }
+}
