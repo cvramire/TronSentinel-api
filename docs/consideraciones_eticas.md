@@ -65,13 +65,17 @@ requerirían recolectar datos personales sin base legal.
 
 | Marco | Aplicación | Estado |
 |---|---|---|
-| LOPDP Ecuador (2021) y Reglamento | Si una dirección o un log permiten identificar a una persona; incluye el derecho a no ser objeto de decisiones basadas únicamente en tratamiento automatizado | Diseño alineado (minimización, sin decisiones automáticas); formalización pendiente antes de producción |
-| Norma SPDP para IA (Res. SPDP-SPD-2026-0009-R, reformada por SPDP-SPD-2026-0037-R) | Gestión de riesgos, evaluación de impacto, transparencia hacia el responsable | Model card y limitaciones publicadas; evaluación de impacto pendiente |
-| Ley Orgánica de Prevención de Lavado de Activos (2024) | Los proveedores de activos virtuales son sujetos obligados con debida diligencia basada en riesgo | TronSentinel no es sujeto obligado; puede ser un insumo, nunca sustituto de la debida diligencia |
+| LOPDP Ecuador (R.O. Quinto Suplemento 459, 26 de mayo de 2021) y su Reglamento | Aplica si una dirección o un log permiten identificar a una persona; incluye el derecho a no ser objeto de decisiones basadas únicamente en tratamiento automatizado | Diseño alineado (minimización, SHADOW sin decisiones automáticas, revisión humana de cada alerta); formalización pendiente antes de producción |
+| Norma SPDP para IA, Res. SPDP-SPD-2026-0009-R (R.O. No. 240, 10 de marzo de 2026), reformada por la Res. SPDP-SPD-2026-0037-R (9 de septiembre de 2026) | Gestión de riesgos, evaluación de impacto y transparencia. La reforma alcanza a los encargados con "acceso, visibilidad o control efectivo" y obliga a proveedores y desarrolladores a informar al responsable sobre funcionamiento, limitaciones, riesgos y controles | Model card y limitaciones publicadas, con intervalos de confianza, prevalencia y resultados por subgrupo; evaluación de impacto pendiente |
+| Norma técnica de vulneraciones, Res. SPDP-SPD-2026-0040-R (9 de septiembre de 2026) | Regula la notificación de vulneraciones de seguridad de datos personales mediante el sistema SISPDP | Plan de incidentes definido; alineamos sus plazos con esta norma antes de cualquier producción |
+| Ley Orgánica de Prevención de Lavado de Activos (R.O. Cuarto Suplemento 610, 29 de julio de 2024) | Define activo virtual y proveedor de servicios de activos virtuales (art. 4, lit. a y z), los clasifica como sujetos obligados (art. 26) y exige debida diligencia basada en riesgos (arts. 41 a 43) y reporte mensual de operaciones iguales o superiores a USD 10.000 (art. 58). Los arts. 31 y 57 tienen nota de derogatoria en el texto consolidado de la UAFE y su vigencia debe confirmarse | TronSentinel no es sujeto obligado; puede ser un insumo del enfoque basado en riesgos de un integrador, nunca un sustituto de su debida diligencia ni la decisión de un reporte de operación sospechosa |
+| Régimen de criptoactivos en Ecuador | Los criptoactivos no son moneda de curso legal ni medio de pago autorizado por la Junta de Política y Regulación Monetaria; el Banco Central (comunicado del 12 de agosto de 2024) cita el art. 98 del COMF. En octubre de 2026 la Asamblea tramita un proyecto para licenciar exchanges | Uso informativo: no ofrecemos pagos ni custodia; reevaluaremos si se aprueba un régimen de licencias |
 | GDPR / CCPA | Solo si se ofrecen servicios a residentes de la UE / California | No aplica en el alcance actual; reevaluar antes de hacerlo |
 | EU AI Act | Según mercado y propósito | No clasificado como alto riesgo en el uso previsto |
 
-Como la blockchain es inmutable, la protección se concentra en los datos off-chain que sí controlamos.
+Como la blockchain es inmutable, la protección se concentra en los datos off-chain que sí controlamos
+
+Esta evaluación es académica y no sustituye la asesoría jurídica. Antes de cualquier producción haremos una revisión legal del caso de uso, en especial sobre la vigencia de los arts. 31 y 57 de la ley de lavado de activos.
 
 ## 4. Transparencia y explicabilidad
 
