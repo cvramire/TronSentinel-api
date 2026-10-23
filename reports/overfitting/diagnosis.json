@@ -1,0 +1,9 @@
+{
+  "diagnosis": "GENERALIZACION_ADECUADA",
+  "bestIterationByValidationLogLoss": 150,
+  "trainValidationPrAucGap": -0.005846589169088867,
+  "trainValidationLogLossGapAtBestIteration": 0.03069681817739006,
+  "validationPrAuc": 0.9349587282029832,
+  "testPrAuc": 0.8986624427613512,
+  "note": "Regla académica orientativa; la interpretación final debe considerar todas las curvas."
+}

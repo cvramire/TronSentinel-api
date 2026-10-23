@@ -350,7 +350,8 @@
         if (!response.ok) {
           const code = data.code || data.error || `HTTP ${response.status}`;
           if (response.status === 401 || response.status === 403) throw new Error("La clave de acceso no es válida.");
-          if (code === "HISTORY_TRUNCATED" || code === "NOT_SCORABLE") throw new Error("El historial está truncado y la wallet no puede evaluarse de forma segura.");
+          if (code === "HISTORY_TRUNCATED") throw new Error("Wallet de volumen muy alto (más de 10.000 transferencias en 90 días): probablemente un exchange o servicio, no se evalúa con este modelo.");
+          if (code === "NOT_SCORABLE") throw new Error("El historial está truncado y la wallet no puede evaluarse de forma segura.");
           throw new Error(data.message || `La evaluación no pudo completarse (${code}).`);
         }
         if (data.liveHistory?.truncated) throw new Error("El historial está truncado y el resultado no debe interpretarse.");

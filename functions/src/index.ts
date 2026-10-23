@@ -30,7 +30,7 @@ app.use(errorHandler);
 
 export const TRONSENTINEL = onRequest({
   region: "us-central1",
-  concurrency: 1,
+  concurrency: 8,
   minInstances: 0,
   maxInstances: 1,
   memory: "1GiB",
