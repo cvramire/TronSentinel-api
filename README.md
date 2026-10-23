@@ -55,6 +55,15 @@ Las reglas de Firestore niegan todo acceso desde clientes. El servicio usa Fireb
 
 El clasificador rechaza artefactos que declaren variables asociadas con listas negras, OFAC, Tatum, etiquetas o scores anteriores. Las listas externas se reservan para la construcción offline del ground truth.
 
+## Gobernanza del entrenamiento
+
+El modelo desplegado (`v0.6.1`, artefacto SHADOW `v0.7.0`, umbral `0.4288828973999436`) no se modifica. Los nuevos candidatos siguen [`docs/TRAINING_GOVERNANCE.md`](docs/TRAINING_GOVERNANCE.md):
+
+- `npm run onchain:model:train -- ...`: early stopping externo hasta 1.000 estimadores (paciencia 50); el test queda sellado.
+- `npm run onchain:model:diagnose -- ...`: cinco experimentos de regularización, 30 semillas y bootstrap agrupado por `matchedCaseId`.
+- `npm run onchain:model:confirm-test -- ...`: apertura única del test, registrada en `governance/data-openings.json`.
+- `npm run test:governance`: pruebas de las reglas.
+
 ## Verificación local
 
 ```bash

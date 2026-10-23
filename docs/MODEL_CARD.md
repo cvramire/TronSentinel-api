@@ -103,6 +103,17 @@ Las variables resumen la actividad de cada wallet dentro de su ventana de 90 dí
 | Umbral | 42,89 % | Límite operativo congelado |
 | Decisión | No requiere revisión | 7,64 % está por debajo de 42,89 % |
 
+**Aclaraciones posteriores (octubre 2026, diagnóstico corregido de overfitting):**
+
+- 150 estimadores no constituyen convergencia demostrada. Al ampliar el seguimiento a 1.000 estimadores, el log loss de validación sigue bajando después de 150.
+- 914 estimadores (mínimo observado del log loss de validación) es un resultado exploratorio, no un parámetro aprobado. Se obtuvo con la misma validación y varía con la semilla; con la regla predefinida de early stopping el punto óptimo oscila entre 516 y 845 en 10 semillas.
+- Con la muestra actual (60 positivos en validación y 60 en test) no existe una estrategia de regularización estadísticamente ganadora: los IC bootstrap agrupados de las diferencias pareadas incluyen cero.
+- El modelo v0.6.1 continúa en `SHADOW` porque aprobó la gobernanza interna y el holdout externo de una sola apertura, no porque haya ganado una comparación en test.
+- Las probabilidades siguen siendo probabilidades de una muestra caso-control.
+- El score sigue siendo un percentil relativo frente a controles, no una probabilidad absoluta.
+- El subajuste se evalúa contra la prevalencia de cada partición (PR-AUC nulo: 0,2158 en validación, 0,2128 en test), no con un umbral universal de 0,50.
+- El test interno de este dataset y el holdout externo ya fueron abiertos y quedan registrados en `governance/data-openings.json`; no pueden reutilizarse para elegir estimadores, profundidad, regularización, umbral ni percentiles. La política de entrenamiento de la próxima versión está en [`TRAINING_GOVERNANCE.md`](./TRAINING_GOVERNANCE.md).
+
 ## 5. Validación y desempeño
 
 | Evaluación | ROC AUC | PR AUC | Brier | Recall | FPR |
@@ -164,6 +175,7 @@ Ejemplo real del prototipo:
 - Las variables monetarias y de recencia concentran gran parte de la capacidad predictiva.
 - Las wallets con muy poca actividad pueden producir resultados evaluables con evidencia limitada.
 - El data drift requiere monitoreo y una futura política formal de reentrenamiento.
+- Una versión candidata `v0.7.x`/`v0.8.x` requiere una nueva cohorte temporal externa; el holdout externo de v0.6.1 ya fue consumido.
 
 **Trazabilidad:** dataset, modelo, reportes de entrenamiento, robustez, validación académica y holdout externo están versionados mediante SHA-256. El dataset de desarrollo congelado tiene hash `1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585`.
 

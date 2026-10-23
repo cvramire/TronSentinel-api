@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "policy": "Una partición listada aquí ya fue abierta. No puede usarse para seleccionar estimadores, profundidad, regularización, umbral, calibración ni percentiles, ni para confirmar otro modelo. Un nuevo candidato requiere una nueva cohorte temporal.",
+  "openings": [
+    {
+      "partition": "internal-test",
+      "datasetHash": "1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585",
+      "openedFor": "tronsentinel-onchain-riskset-v0.6.1-20260928",
+      "modelHash": "85552ac0a323d28ad3b6f78900b8daa2e8b9802a09935275b4c44ae32d55f181",
+      "openedAtUtc": "2026-09-28T14:02:20.871000+00:00",
+      "purpose": "Métricas de test del training report, robustez y validación académica de v0.6.1. Reconsultado de forma solo confirmatoria en el diagnóstico corregido de la Semana 3.",
+      "openedBy": "train-onchain-model.py (versión previa a la gobernanza de octubre 2026)",
+      "reusableForSelection": false
+    },
+    {
+      "partition": "external-holdout",
+      "datasetHash": "c144de87009d45517a6c0164edf7dd2371080188e2ea0e78ddc336f8a3216a1d",
+      "openedFor": "tronsentinel-onchain-riskset-v0.6.1-20260928",
+      "modelHash": "85552ac0a323d28ad3b6f78900b8daa2e8b9802a09935275b4c44ae32d55f181",
+      "openedAtUtc": "2026-09-28T16:44:10.331971+00:00",
+      "purpose": "Holdout externo de una sola apertura (external-holdout-dataset.csv). Resultado: PASSED_EXTERNAL_HOLDOUT, APPROVED_FOR_SHADOW_DEPLOYMENT.",
+      "openedBy": "evaluación externa v0.6.1",
+      "reusableForSelection": false
+    },
+    {
+      "partition": "external-holdout",
+      "datasetHash": "d30562b51486359ceee11eef191f6a787117d75a8fd6783e34b0e791f3fcf4a1",
+      "openedFor": "tronsentinel-onchain-riskset-v0.6.1-20260928",
+      "modelHash": "85552ac0a323d28ad3b6f78900b8daa2e8b9802a09935275b4c44ae32d55f181",
+      "openedAtUtc": "2026-09-28T16:44:10.331971+00:00",
+      "purpose": "Archivo fuente de positivos del holdout externo v0.6.1 (fileHashes.positiveHoldout del manifiesto de congelamiento).",
+      "openedBy": "evaluación externa v0.6.1",
+      "reusableForSelection": false
+    },
+    {
+      "partition": "external-holdout",
+      "datasetHash": "813867ebb72441d9d29af9a44c91a49d65f69cfdf128111e041caa4ab149f493",
+      "openedFor": "tronsentinel-onchain-riskset-v0.6.1-20260928",
+      "modelHash": "85552ac0a323d28ad3b6f78900b8daa2e8b9802a09935275b4c44ae32d55f181",
+      "openedAtUtc": "2026-09-28T16:44:10.331971+00:00",
+      "purpose": "Archivo fuente de controles del holdout externo v0.6.1 (fileHashes.controlHoldout del manifiesto de congelamiento).",
+      "openedBy": "evaluación externa v0.6.1",
+      "reusableForSelection": false
+    }
+  ]
+}

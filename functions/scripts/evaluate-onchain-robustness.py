@@ -33,6 +33,12 @@ def parse_args():
     parser.add_argument("--stress-dataset")
     parser.add_argument("--bootstrap", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=20260927)
+    parser.add_argument(
+        "--min-pr-auc-lift",
+        type=float,
+        default=0.10,
+        help="Mejora mínima del IC inferior de PR-AUC sobre la prevalencia de test",
+    )
     return parser.parse_args()
 
 
@@ -222,7 +228,15 @@ def main():
         "prAuc": clean_test["prAuc"] - ablation["test"]["prAuc"],
         "recall": clean_test["recall"] - ablation["test"]["recall"],
     }
+    test_prevalence = float(test["target"].mean())
+    pr_auc_lift = {
+        "nullPrAuc": test_prevalence,
+        "prAucLower95": bootstrap["prAuc"]["lower95"],
+        "lowerImprovement95": bootstrap["prAuc"]["lower95"] - test_prevalence,
+        "minimumMaterialLift": args.min_pr_auc_lift,
+    }
     checks = {
+        "bootstrapPrAucLower95ExceedsPrevalenceByMinLift": pr_auc_lift["lowerImprovement95"] >= args.min_pr_auc_lift,
         "bootstrapRecallLower95AtLeast0_50": bootstrap["recall"]["lower95"] >= 0.50,
         "bootstrapFprUpper95AtMost0_10": bootstrap["falsePositiveRate"]["upper95"] <= 0.10,
         "bootstrapRocAucLower95AtLeast0_70": bootstrap["rocAuc"]["lower95"] >= 0.70,
@@ -239,6 +253,7 @@ def main():
         "bootstrapRepetitions": args.bootstrap,
         "cleanModelTest": clean_test,
         "bootstrap95": bootstrap,
+        "prAucLiftOverPrevalence": pr_auc_lift,
         "monetaryFeatureAblation": ablation,
         "ablationDrops": drops,
         "censoredControlStress": stress,
