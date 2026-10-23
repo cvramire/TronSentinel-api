@@ -1,0 +1,158 @@
+{
+  "diagnosisFramework": "validation_for_selection_test_for_confirmation",
+  "nullPrAucPolicy": "PR-AUC nulo igual a prevalencia de la partición",
+  "datasetHash": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad",
+  "validationNullPrAuc": 0.211340206185567,
+  "experiments": [
+    {
+      "key": "base_complex",
+      "name": "Base compleja",
+      "max_depth": 3,
+      "min_samples_leaf": 1,
+      "subsample": 1.0,
+      "stochastic": false
+    },
+    {
+      "key": "stumps",
+      "name": "Stumps",
+      "max_depth": 1,
+      "min_samples_leaf": 1,
+      "subsample": 1.0,
+      "stochastic": false
+    },
+    {
+      "key": "leaf_only",
+      "name": "Solo leaf",
+      "max_depth": 1,
+      "min_samples_leaf": 20,
+      "subsample": 1.0,
+      "stochastic": false
+    },
+    {
+      "key": "subsample_only",
+      "name": "Solo subsample",
+      "max_depth": 1,
+      "min_samples_leaf": 1,
+      "subsample": 0.8,
+      "stochastic": true
+    },
+    {
+      "key": "combined",
+      "name": "Combinada",
+      "max_depth": 1,
+      "min_samples_leaf": 20,
+      "subsample": 0.8,
+      "stochastic": true
+    }
+  ],
+  "seeds": 30,
+  "bootstrapRepetitions": 5000,
+  "convergence": {
+    "searchMaximum": 1000,
+    "earlyStoppingRule": {
+      "rule": "patience_on_validation_log_loss",
+      "patience": 50,
+      "minDelta": 0.0001,
+      "searchMaximum": 1000,
+      "bestIteration": 603,
+      "bestValidationLogLoss": 0.16571873403228427,
+      "stoppedAtIteration": 653,
+      "stoppedEarly": true,
+      "convergenceDemonstrated": true,
+      "absoluteMinimumIteration": 954,
+      "absoluteMinimumValidationLogLoss": 0.1644748352216832
+    },
+    "absoluteMinimumIteration": 954,
+    "absoluteMinimumIsExploratory": true,
+    "absoluteMinimumAtSearchBoundary": false,
+    "deployedEstimators": 150,
+    "deployedConvergenceDemonstrated": false,
+    "validationLogLossAtDeployed": 0.23064015620131953,
+    "validationPrAucAtDeployed": 0.9367926505451842,
+    "validationLogLossAtAbsoluteMinimum": 0.1644748352216832,
+    "validationPrAucAtAbsoluteMinimum": 0.9378572464819945,
+    "estimatorGrid": [
+      {
+        "iteration": 150,
+        "validationLogLoss": 0.23064015620131953,
+        "validationPrAuc": 0.9367926505451842,
+        "trainValidationLogLossGap": -0.030122263853448045
+      },
+      {
+        "iteration": 300,
+        "validationLogLoss": 0.1861238196514656,
+        "validationPrAuc": 0.9412449762851267,
+        "trainValidationLogLossGap": -0.03059943229392159
+      },
+      {
+        "iteration": 500,
+        "validationLogLoss": 0.16975465445134824,
+        "validationPrAuc": 0.9409768848373221,
+        "trainValidationLogLossGap": -0.023825126176027472
+      },
+      {
+        "iteration": 700,
+        "validationLogLoss": 0.1663157667951474,
+        "validationPrAuc": 0.9373672185484895,
+        "trainValidationLogLossGap": -0.015505898621258535
+      },
+      {
+        "iteration": 900,
+        "validationLogLoss": 0.16566274678590964,
+        "validationPrAuc": 0.9370655093041286,
+        "trainValidationLogLossGap": -0.00767550973937095
+      },
+      {
+        "iteration": 1000,
+        "validationLogLoss": 0.16551228609434515,
+        "validationPrAuc": 0.9362408504874004,
+        "trainValidationLogLossGap": -0.003925743787606489
+      }
+    ]
+  },
+  "selection": {
+    "rule": "max validation_prAuc_mean, tie-break min validation_logLoss_mean",
+    "topByValidation": "base_complex",
+    "reference": "combined",
+    "topMinusReferencePrAuc95": {
+      "point": 0.01431689921925905,
+      "lower95": 0.0014990350231045891,
+      "median": 0.014490301524662685,
+      "upper95": 0.02873367347122845,
+      "includesZero": false
+    },
+    "statisticallySuperiorToReference": true,
+    "conclusion": "base_complex supera a combined en validación con IC que excluye cero",
+    "testUsed": false
+  },
+  "diagnosis": {
+    "diagnosis": "GENERALIZACION_ADECUADA",
+    "referenceStrategy": "Combinada",
+    "overfittingSignal": false,
+    "underfittingSignal": false,
+    "trainValidationPrAucGap": -0.051042606754026915,
+    "trainValidationLogLossGapAtAbsoluteMinimum": -0.00578770634990558,
+    "validationPrAuc": 0.9342354706613231,
+    "prAucLiftOverPrevalence": {
+      "nullPrAuc": 0.211340206185567,
+      "prAuc": 0.9342354706613231,
+      "improvement": 0.722895264475756,
+      "minimumMaterialLift": 0.1,
+      "ciAvailable": true,
+      "prAucLower95": 0.8944994094672636,
+      "prAucUpper95": 0.9667821798957267,
+      "lowerImprovement95": 0.6831592032816965,
+      "materialImprovementDemonstrated": true,
+      "possibleUnderfitting": false
+    },
+    "underfittingRule": "Posible subajuste si el límite inferior del IC 95 % de PR-AUC no supera la prevalencia en al menos minimumMaterialLift.",
+    "note": "Regla académica orientativa; la interpretación final debe considerar todas las curvas."
+  },
+  "thresholdMetricsNote": "Recall y FPR usan umbrales elegidos en la misma validación (FPR <= 5 %); son optimistas y solo comparativos.",
+  "test": {
+    "opened": false,
+    "reason": "Test sellado; usar --include-test solo para confirmación"
+  },
+  "deployedModelChanged": false,
+  "externalHoldoutUsed": false
+}

@@ -176,6 +176,7 @@ Ejemplo real del prototipo:
 - Las wallets con muy poca actividad pueden producir resultados evaluables con evidencia limitada.
 - El data drift requiere monitoreo y una futura política formal de reentrenamiento.
 - Una versión candidata `v0.7.x`/`v0.8.x` requiere una nueva cohorte temporal externa; el holdout externo de v0.6.1 ya fue consumido.
+- **Sesgo de selección en `daysSinceLastTransfer` (hallazgo de octubre de 2026).** El risk set elige como controles wallets con una transferencia en los 300 segundos previos a la fecha índice, así que para los controles esta variable vale casi 0 por construcción: mediana 0,0 días y 68 % por debajo de 0,01 días en el train de v6, frente a una mediana de 1,25 días en los casos. Su importancia en v0.6.1 (49,7 %) refleja en parte el diseño de muestreo y no solo riesgo. El holdout externo comparte el diseño y no puede detectarlo. En producción, una wallet evaluada justo después de transaccionar tiende a recibir un score más bajo. El candidato v0.7.x se entrena con esta variable neutralizada (`--neutralize-features daysSinceLastTransfer`).
 
 **Trazabilidad:** dataset, modelo, reportes de entrenamiento, robustez, validación académica y holdout externo están versionados mediante SHA-256. El dataset de desarrollo congelado tiene hash `1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585`.
 

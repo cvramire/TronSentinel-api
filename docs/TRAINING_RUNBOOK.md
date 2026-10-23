@@ -104,27 +104,21 @@ Genera `cases-development.csv`, `cases-external.csv` y `case-split-summary.json`
 ### 2.1 Muestrear controles
 
 ```bash
-EXCL="--exclude $DATA/onchain-features-v1.1/onchain-feature-dataset.csv \
- --exclude $DATA/onchain-risk-set-v6-development-dataset/onchain-feature-dataset.csv \
- --exclude $DATA/onchain-model-risk-set-v0.6.1-external-holdout/external-holdout-dataset.csv \
- --exclude validation/onchain-control-pool-v2.csv \
- --exclude $DATA/onchain-control-pool-v3-consolidated/onchain-control-pool-v3-wallets.csv \
- --exclude $DATA/onchain-control-pilot-v4-consolidated/onchain-control-pilot-v4-wallets.csv \
- --exclude $DATA/onchain-risk-set-v5-pilot/risk-set-development-controls-v5.csv \
- --exclude $DATA/onchain-risk-set-v5-additional-sampling/risk-set-development-controls-v5.csv \
- --exclude $DATA/onchain-risk-set-v6-external-corrected-sampling-v2/risk-set-external-holdout-v5.csv"
+EXCL=(   # arreglo: zsh no separa variables de texto en argumentos
+  --exclude $DATA/onchain-risk-set-v6-external-corrected-sampling-v2/risk-set-external-holdout-v5.csv
+)
 
 # Desarrollo: 4 controles por caso
 npm run onchain:risk-set -- --cases $DATA/onchain-cases-$V/cases-development.csv --labels $LABELS \
-  $EXCL --exclude $DATA/onchain-cases-$V/cases-external.csv \
-  --development-per-case 4 --holdout-per-case 0 \
+  "${EXCL[@]}" --exclude $DATA/onchain-cases-$V/cases-external.csv \
+  --case-limit 548 --development-per-case 4 --holdout-per-case 0 \
   --seed tronsentinel-risk-set-$V-dev --output-dir $DATA/onchain-risk-set-$V-dev-sampling
 
 # Externo: 2 controles por caso. El script exige al menos 1 de desarrollo; esa fila se descarta.
 npm run onchain:risk-set -- --cases $DATA/onchain-cases-$V/cases-external.csv --labels $LABELS \
-  $EXCL --exclude $DATA/onchain-cases-$V/cases-development.csv \
+  "${EXCL[@]}" --exclude $DATA/onchain-cases-$V/cases-development.csv \
   --exclude $DATA/onchain-risk-set-$V-dev-sampling/risk-set-development-controls-v5.csv \
-  --development-per-case 1 --holdout-per-case 2 \
+  --case-limit 150 --development-per-case 1 --holdout-per-case 2 \
   --seed tronsentinel-risk-set-$V-ext --output-dir $DATA/onchain-risk-set-$V-ext-sampling
 ```
 
