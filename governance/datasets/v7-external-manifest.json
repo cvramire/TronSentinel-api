@@ -1,0 +1,105 @@
+{
+  "datasetVersion": "tronsentinel-risk-set-v7-external-1.0.0",
+  "featureSetVersion": "tron-wallet-onchain-1.0.0",
+  "cohortDesign": "incidence-density-active-risk-set-case-control",
+  "role": "external",
+  "lookbackDays": 90,
+  "rows": 426,
+  "positives": 148,
+  "controls": 278,
+  "matchedGroups": 148,
+  "samplePrevalence": 0.3474178403755869,
+  "controlsPerCaseDistribution": {
+    "1": 18,
+    "2": 130
+  },
+  "excludedCasesWithoutCompleteControl": [
+    "case_4a4b401013ba405b",
+    "case_5e0b46001840649f"
+  ],
+  "caseControlAddressOverlap": 0,
+  "excludedFileAddressOverlap": 0,
+  "temporalMismatches": 0,
+  "nonFiniteFeatureValues": 0,
+  "forbiddenFeatures": [],
+  "labelLeakagePolicy": "Blacklist membership is target only and is not a feature",
+  "pointInTimePolicy": "All features use only the lookback window before indexAtUtc",
+  "splitUnit": "matchedCaseId",
+  "splitStrategy": "external-holdout-only",
+  "splits": {
+    "external_holdout": {
+      "rows": 426,
+      "positives": 148,
+      "controls": 278,
+      "groups": 148
+    }
+  },
+  "featureNames": [
+    "transferCount",
+    "transactionCount",
+    "activeDays",
+    "activeDayRatio",
+    "averageDailyTransfers",
+    "inboundCount",
+    "outboundCount",
+    "inboundRatio",
+    "outboundRatio",
+    "totalAmount",
+    "inboundAmount",
+    "outboundAmount",
+    "netFlowAmount",
+    "meanAmount",
+    "amountStd",
+    "amountCv",
+    "maxAmount",
+    "uniqueCounterparties",
+    "uniqueInboundCounterparties",
+    "uniqueOutboundCounterparties",
+    "repeatedCounterpartyRatio",
+    "topCounterpartyShare",
+    "counterpartyHhi",
+    "counterpartyEntropy",
+    "inboundTopCounterpartyShare",
+    "outboundTopCounterpartyShare",
+    "selfTransferCount",
+    "selfTransferRatio",
+    "usdtTransferCount",
+    "tusdTransferCount",
+    "usdtAmount",
+    "tusdAmount",
+    "meanInterEventSeconds",
+    "interEventStdSeconds",
+    "interEventCv",
+    "burstiness",
+    "observedSpanDays",
+    "daysSinceLastTransfer"
+  ],
+  "sourceHashes": {
+    "cases": "6556f72fae3ebca3d7312a6bbd8dca12f5871169f486cc7d9065828995284324",
+    "controls": [
+      {
+        "file": "/Users/carlosramirez/Desktop/TronSentinel-data/onchain-risk-set-v7-ext-features/onchain-feature-dataset.csv",
+        "sha256": "d73d1f92c74f57cdee4594ddbe0ded38dfb8d2555734b0b69712bae2d9a0b4a6"
+      }
+    ],
+    "excluded": [
+      {
+        "file": "/Users/carlosramirez/Desktop/TronSentinel-data/onchain-risk-set-v7-development-dataset/onchain-feature-dataset.csv",
+        "sha256": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad"
+      },
+      {
+        "file": "/Users/carlosramirez/Desktop/TronSentinel-data/onchain-risk-set-v6-development-dataset/onchain-feature-dataset.csv",
+        "sha256": "1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585"
+      },
+      {
+        "file": "/Users/carlosramirez/Desktop/TronSentinel-data/onchain-model-risk-set-v0.6.1-external-holdout/external-holdout-dataset.csv",
+        "sha256": "c144de87009d45517a6c0164edf7dd2371080188e2ea0e78ddc336f8a3216a1d"
+      }
+    ]
+  },
+  "datasetSha256": "545a8e75d19c2648b0fd6a8d32076939e95064e7543f3f5dde9120cbdda84102",
+  "trainingReady": false,
+  "locked": true,
+  "productionProbabilityReady": false,
+  "generatedAtUtc": "2026-10-23T12:31:38.627502+00:00"
+}
