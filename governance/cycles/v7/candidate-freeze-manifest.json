@@ -1,0 +1,71 @@
+{
+  "freezeStatus": "FROZEN_FOR_ONE_TIME_INTERNAL_TEST",
+  "modelVersion": "tronsentinel-onchain-riskset-v0.7.0-20261023",
+  "algorithm": "gradient_boosted_stumps_v1",
+  "singleClassifier": true,
+  "featureSetVersion": "tron-wallet-onchain-1.0.0",
+  "featureCount": 38,
+  "hyperparameters": {
+    "nEstimators": 769,
+    "learningRate": 0.04,
+    "maxDepth": 1,
+    "minSamplesLeaf": 20,
+    "subsample": 0.8,
+    "seed": 20260927,
+    "neutralizedFeatures": [
+      "daysSinceLastTransfer"
+    ]
+  },
+  "estimatorSelection": {
+    "policy": "external_early_stopping",
+    "selectionPartition": "validation",
+    "testUsed": false,
+    "rule": {
+      "rule": "patience_on_validation_log_loss",
+      "patience": 50,
+      "minDelta": 0.0001,
+      "searchMaximum": 2000,
+      "bestIteration": 769,
+      "bestValidationLogLoss": 0.27734071978893593,
+      "stoppedAtIteration": 819,
+      "stoppedEarly": true,
+      "convergenceDemonstrated": true,
+      "absoluteMinimumIteration": 1967,
+      "absoluteMinimumValidationLogLoss": 0.26557135827782885
+    },
+    "estimators": 769
+  },
+  "datasetHash": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad",
+  "threshold": 0.6695152720825202,
+  "maximumValidationFpr": 0.05,
+  "productionProbabilityReady": false,
+  "trainingGovernance": {
+    "promotionEligible": false,
+    "freezeEligible": true,
+    "decision": "READY_FOR_FREEZE",
+    "checks": {
+      "validationRocAucAtLeast0_70": true,
+      "validationPrAucLower95ExceedsPrevalenceByMinLift": true,
+      "validationRecallAtControlledFprAtLeast0_50": true,
+      "validationFalsePositiveRateAtMost0_10": true,
+      "earlyStoppingConvergedBeforeSearchMaximum": true
+    },
+    "testPolicy": "SEALED_UNTIL_FREEZE",
+    "testOpenedByTraining": false,
+    "nextStep": "confirm-onchain-test.py (una sola apertura) y luego nueva cohorte externa",
+    "productionProbabilityReady": false
+  },
+  "holdoutPolicy": {
+    "internalTestOpenings": 1,
+    "externalHoldoutOpenings": 1,
+    "thresholdChangesAfterOpening": false,
+    "retrainingAfterOpening": false
+  },
+  "fileHashes": {
+    "model": "59930ec84472fffab5ac282dc611c47896904b395320f84a8bdde3c1f42c338c",
+    "trainingReport": "5f774ab968a36bd1767d1aa31479470309fbef95f1fc497c3085a5bbdb746d7a",
+    "developmentDataset": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad",
+    "developmentManifest": "a4ccdb89fa63e72e376fc65ded71740d3af364a642f62f96b0ac6d4516a35df9"
+  },
+  "frozenAtUtc": "2026-10-23T12:51:46.572484+00:00"
+}

@@ -1,0 +1,189 @@
+{
+  "ok": true,
+  "modelVersion": "tronsentinel-onchain-riskset-v0.7.0-20261023",
+  "threshold": 0.6695152720825202,
+  "bootstrapRepetitions": 2000,
+  "cleanModelTest": {
+    "precision": 0.6666666666666666,
+    "recall": 0.5121951219512195,
+    "f1": 0.5793103448275863,
+    "falsePositiveRate": 0.06818181818181818,
+    "confusionMatrix": {
+      "tn": 287,
+      "fp": 21,
+      "fn": 40,
+      "tp": 42
+    },
+    "rocAuc": 0.8838295850490973,
+    "prAuc": 0.7094159144684629
+  },
+  "bootstrap95": {
+    "rocAuc": {
+      "lower95": 0.8417365010080005,
+      "median": 0.8851888276947286,
+      "upper95": 0.9241605890323609
+    },
+    "prAuc": {
+      "lower95": 0.6215131056124227,
+      "median": 0.7148213957741356,
+      "upper95": 0.8034631555331395
+    },
+    "precision": {
+      "lower95": 0.5633802816901409,
+      "median": 0.6666666666666666,
+      "upper95": 0.7812642045454544
+    },
+    "recall": {
+      "lower95": 0.4024390243902439,
+      "median": 0.5121951219512195,
+      "upper95": 0.6219512195121951
+    },
+    "f1": {
+      "lower95": 0.48117293233082714,
+      "median": 0.5833333333333334,
+      "upper95": 0.6756756756756757
+    },
+    "falsePositiveRate": {
+      "lower95": 0.04179729367631297,
+      "median": 0.06774193548387097,
+      "upper95": 0.09647080178404725
+    }
+  },
+  "prAucLiftOverPrevalence": {
+    "nullPrAuc": 0.21025641025641026,
+    "prAucLower95": 0.6215131056124227,
+    "lowerImprovement95": 0.4112566953560124,
+    "minimumMaterialLift": 0.1
+  },
+  "monetaryFeatureAblation": {
+    "excludedFeatures": [
+      "amountCv",
+      "amountStd",
+      "inboundAmount",
+      "maxAmount",
+      "meanAmount",
+      "netFlowAmount",
+      "outboundAmount",
+      "totalAmount",
+      "tusdAmount",
+      "usdtAmount"
+    ],
+    "featureCount": 28,
+    "threshold": 0.45460554695221367,
+    "validation": {
+      "precision": 0.723404255319149,
+      "recall": 0.8292682926829268,
+      "f1": 0.7727272727272727,
+      "falsePositiveRate": 0.08496732026143791,
+      "confusionMatrix": {
+        "tn": 280,
+        "fp": 26,
+        "fn": 14,
+        "tp": 68
+      },
+      "rocAuc": 0.941256177267655,
+      "prAuc": 0.7670108220509264
+    },
+    "test": {
+      "precision": 0.5959595959595959,
+      "recall": 0.7195121951219512,
+      "f1": 0.6519337016574586,
+      "falsePositiveRate": 0.12987012987012986,
+      "confusionMatrix": {
+        "tn": 268,
+        "fp": 40,
+        "fn": 23,
+        "tp": 59
+      },
+      "rocAuc": 0.8978064618308521,
+      "prAuc": 0.6050640310043625
+    },
+    "featureImportance": [
+      {
+        "feature": "daysSinceLastTransfer",
+        "importance": 0.8766647104450883
+      },
+      {
+        "feature": "repeatedCounterpartyRatio",
+        "importance": 0.07144099393709494
+      },
+      {
+        "feature": "outboundTopCounterpartyShare",
+        "importance": 0.029333111324752838
+      },
+      {
+        "feature": "topCounterpartyShare",
+        "importance": 0.007853305820584423
+      },
+      {
+        "feature": "counterpartyHhi",
+        "importance": 0.006692528409617362
+      },
+      {
+        "feature": "observedSpanDays",
+        "importance": 0.006579186328223421
+      },
+      {
+        "feature": "transactionCount",
+        "importance": 0.000640630762770654
+      },
+      {
+        "feature": "interEventCv",
+        "importance": 0.000408388526299956
+      },
+      {
+        "feature": "meanInterEventSeconds",
+        "importance": 0.00038714444556807844
+      },
+      {
+        "feature": "transferCount",
+        "importance": 0.0
+      },
+      {
+        "feature": "activeDays",
+        "importance": 0.0
+      },
+      {
+        "feature": "activeDayRatio",
+        "importance": 0.0
+      },
+      {
+        "feature": "averageDailyTransfers",
+        "importance": 0.0
+      },
+      {
+        "feature": "inboundCount",
+        "importance": 0.0
+      },
+      {
+        "feature": "outboundCount",
+        "importance": 0.0
+      }
+    ]
+  },
+  "ablationDrops": {
+    "rocAuc": -0.013976876781754854,
+    "prAuc": 0.1043518834641004,
+    "recall": -0.20731707317073167
+  },
+  "censoredControlStress": {
+    "available": false,
+    "scoringPolicy": "COMPLETE_HISTORY_ONLY"
+  },
+  "governance": {
+    "robustnessEligible": false,
+    "decision": "REVIEW_REQUIRED",
+    "checks": {
+      "bootstrapPrAucLower95ExceedsPrevalenceByMinLift": true,
+      "bootstrapRecallLower95AtLeast0_50": false,
+      "bootstrapFprUpper95AtMost0_10": true,
+      "bootstrapRocAucLower95AtLeast0_70": true,
+      "bootstrapPrAucLower95AtLeast0_50": true,
+      "ablationTestRocAucAtLeast0_70": true,
+      "ablationTestPrAucAtLeast0_50": true,
+      "ablationRocAucDropAtMost0_15": true,
+      "ablationPrAucDropAtMost0_20": true
+    },
+    "stressTestIsExploratory": true
+  }
+}

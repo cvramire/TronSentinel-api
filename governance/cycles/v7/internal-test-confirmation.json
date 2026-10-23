@@ -1,0 +1,78 @@
+{
+  "ok": true,
+  "evaluationType": "ONE_TIME_SEALED_PARTITION",
+  "partition": "internal-test",
+  "openedAtUtc": "2026-10-23T12:51:48.410302+00:00",
+  "modelVersion": "tronsentinel-onchain-riskset-v0.7.0-20261023",
+  "modelHash": "59930ec84472fffab5ac282dc611c47896904b395320f84a8bdde3c1f42c338c",
+  "datasetHash": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad",
+  "threshold": 0.6695152720825202,
+  "rows": 390,
+  "positives": 82,
+  "controls": 308,
+  "groups": 82,
+  "metrics": {
+    "prAuc": 0.7094159144684629,
+    "rocAuc": 0.8838295850490973,
+    "brier": 0.1033212875004254,
+    "constantBaselineBrier": 0.16604865220249831
+  },
+  "bootstrap95": {
+    "prAuc": {
+      "point": 0.7094159144684629,
+      "lower95": 0.6193961390276221,
+      "median": 0.7143924167814986,
+      "upper95": 0.7988045873597205
+    },
+    "rocAuc": {
+      "point": 0.8838295850490973,
+      "lower95": 0.8418622452169442,
+      "median": 0.8844175515914878,
+      "upper95": 0.9235550895030182
+    },
+    "recall": {
+      "point": 0.5121951219512195,
+      "lower95": 0.4024390243902439,
+      "median": 0.5121951219512195,
+      "upper95": 0.6219512195121951
+    },
+    "falsePositiveRate": {
+      "point": 0.06818181818181818,
+      "lower95": 0.039863809377131416,
+      "median": 0.06752411575562701,
+      "upper95": 0.09678202317569679
+    }
+  },
+  "bootstrapMethod": {
+    "method": "grouped_bootstrap_by_matchedCaseId",
+    "repetitions": 2000,
+    "groups": 82,
+    "seed": 20260930
+  },
+  "prAucLiftOverPrevalence": {
+    "nullPrAuc": 0.21025641025641026,
+    "prAuc": 0.7094159144684629,
+    "improvement": 0.4991595042120526,
+    "minimumMaterialLift": 0.1,
+    "ciAvailable": true,
+    "prAucLower95": 0.6193961390276221,
+    "prAucUpper95": 0.7988045873597205,
+    "lowerImprovement95": 0.40913972877121185,
+    "materialImprovementDemonstrated": true,
+    "possibleUnderfitting": false
+  },
+  "checks": {
+    "prAucLower95ExceedsPrevalenceByMinLift": true,
+    "rocAucLower95AtLeast0_70": true,
+    "recallLower95AtLeast0_50": false,
+    "falsePositiveRateUpper95AtMost0_10": true,
+    "brierBetterThanConstantBaseline": true
+  },
+  "decision": "FAILED_INTERNAL_TEST_START_NEW_CYCLE_WITH_FUTURE_DATA",
+  "rules": [
+    "Tras esta apertura no se permite volver a escoger otra estrategia, umbral o calibración usando esta partición.",
+    "Una debilidad detectada se registra y se aborda en un nuevo ciclo con datos futuros.",
+    "Las probabilidades siguen siendo de muestra caso-control; el score es un percentil relativo."
+  ],
+  "generatedAtUtc": "2026-10-23T12:51:51.599023+00:00"
+}

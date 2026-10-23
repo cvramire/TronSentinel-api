@@ -1,0 +1,453 @@
+{
+  "ok": true,
+  "modelVersion": "tronsentinel-onchain-riskset-v0.7.0-20261023",
+  "datasetHash": "bdd3ce69970b039803298c9a6931971bb0906d2b798a28d310f5016c6a1187ad",
+  "rows": 2601,
+  "featureCount": 38,
+  "hyperparameters": {
+    "nEstimators": 769,
+    "learningRate": 0.04,
+    "maxDepth": 1,
+    "minSamplesLeaf": 20,
+    "subsample": 0.8,
+    "seed": 20260927,
+    "neutralizedFeatures": [
+      "daysSinceLastTransfer"
+    ]
+  },
+  "estimatorSelection": {
+    "policy": "external_early_stopping",
+    "selectionPartition": "validation",
+    "testUsed": false,
+    "rule": {
+      "rule": "patience_on_validation_log_loss",
+      "patience": 50,
+      "minDelta": 0.0001,
+      "searchMaximum": 2000,
+      "bestIteration": 769,
+      "bestValidationLogLoss": 0.27734071978893593,
+      "stoppedAtIteration": 819,
+      "stoppedEarly": true,
+      "convergenceDemonstrated": true,
+      "absoluteMinimumIteration": 1967,
+      "absoluteMinimumValidationLogLoss": 0.26557135827782885
+    },
+    "estimators": 769,
+    "estimatorGrid": [
+      {
+        "iteration": 150,
+        "validationLogLoss": 0.36434197708610017,
+        "validationPrAuc": 0.8148057292484069,
+        "validationRocAuc": 0.9320699824645304
+      },
+      {
+        "iteration": 300,
+        "validationLogLoss": 0.3154668221284509,
+        "validationPrAuc": 0.8350343233654549,
+        "validationRocAuc": 0.9413956639566397
+      },
+      {
+        "iteration": 500,
+        "validationLogLoss": 0.2943547875580409,
+        "validationPrAuc": 0.8292681454606353,
+        "validationRocAuc": 0.9453411445879165
+      },
+      {
+        "iteration": 700,
+        "validationLogLoss": 0.28086163567297007,
+        "validationPrAuc": 0.833606153709663,
+        "validationRocAuc": 0.948489558424996
+      },
+      {
+        "iteration": 900,
+        "validationLogLoss": 0.2757160610251265,
+        "validationPrAuc": 0.8303076275203307,
+        "validationRocAuc": 0.9490076518412243
+      },
+      {
+        "iteration": 1000,
+        "validationLogLoss": 0.2741670683515364,
+        "validationPrAuc": 0.8281543930329727,
+        "validationRocAuc": 0.9485692651044157
+      }
+    ],
+    "seedStability": {
+      "evaluated": true,
+      "seeds": 10,
+      "bestIterationMedian": 887.5,
+      "bestIterationMin": 769,
+      "bestIterationMax": 981,
+      "allStoppedEarly": true,
+      "validationPrAucAtBestMean": 0.8278898719996057,
+      "validationPrAucAtBestStd": 0.003863375459744239,
+      "runs": [
+        {
+          "seed": 20260927,
+          "bestIteration": 769,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27734071978893593,
+          "validationPrAucAtBest": 0.8341101631383288
+        },
+        {
+          "seed": 20365656,
+          "bestIteration": 913,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.2767842030323693,
+          "validationPrAucAtBest": 0.8235859787587695
+        },
+        {
+          "seed": 20470385,
+          "bestIteration": 981,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27211343161750595,
+          "validationPrAucAtBest": 0.8304140748105512
+        },
+        {
+          "seed": 20575114,
+          "bestIteration": 895,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27773304001259924,
+          "validationPrAucAtBest": 0.8288613971511468
+        },
+        {
+          "seed": 20679843,
+          "bestIteration": 852,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27890754949320234,
+          "validationPrAucAtBest": 0.8224367467946281
+        },
+        {
+          "seed": 20784572,
+          "bestIteration": 910,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.2756465638095881,
+          "validationPrAucAtBest": 0.8266779128956356
+        },
+        {
+          "seed": 20889301,
+          "bestIteration": 824,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27894678156646646,
+          "validationPrAucAtBest": 0.8268668607464738
+        },
+        {
+          "seed": 20994030,
+          "bestIteration": 880,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.2768189223818643,
+          "validationPrAucAtBest": 0.8280579888466589
+        },
+        {
+          "seed": 21098759,
+          "bestIteration": 942,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27706757189532577,
+          "validationPrAucAtBest": 0.8247427096895247
+        },
+        {
+          "seed": 21203488,
+          "bestIteration": 879,
+          "stoppedEarly": true,
+          "validationLogLossAtBest": 0.27589226271652967,
+          "validationPrAucAtBest": 0.8331448871643394
+        }
+      ],
+      "note": "El modelo exportado usa la semilla primaria; las dem\u00e1s semillas solo miden estabilidad."
+    }
+  },
+  "splits": {
+    "train": {
+      "rows": 1823,
+      "positives": 384,
+      "controls": 1439,
+      "samplePrevalence": 0.2106417992320351,
+      "nullPrAuc": 0.2106417992320351,
+      "prAuc": 0.8341552811185898,
+      "rocAuc": 0.9547265896455872,
+      "brier": 0.06682229434590538,
+      "recallFirstOperatingPoint": {
+        "threshold": 0.203535744962405,
+        "precision": 0.6503623188405797,
+        "recall": 0.9348958333333334,
+        "f1": 0.767094017094017,
+        "falsePositiveRate": 0.1341209173036831,
+        "confusionMatrix": {
+          "tn": 1246,
+          "fp": 193,
+          "fn": 25,
+          "tp": 359
+        }
+      },
+      "controlledFprOperatingPoint": {
+        "threshold": 0.6695152720825202,
+        "precision": 0.7736389684813754,
+        "recall": 0.703125,
+        "f1": 0.7366984993178718,
+        "falsePositiveRate": 0.05489923558026407,
+        "confusionMatrix": {
+          "tn": 1360,
+          "fp": 79,
+          "fn": 114,
+          "tp": 270
+        }
+      }
+    },
+    "validation": {
+      "rows": 388,
+      "positives": 82,
+      "controls": 306,
+      "samplePrevalence": 0.211340206185567,
+      "nullPrAuc": 0.211340206185567,
+      "prAuc": 0.8341101631383288,
+      "rocAuc": 0.9490076518412243,
+      "brier": 0.06823434796998111,
+      "recallFirstOperatingPoint": {
+        "threshold": 0.203535744962405,
+        "precision": 0.6909090909090909,
+        "recall": 0.926829268292683,
+        "f1": 0.7916666666666667,
+        "falsePositiveRate": 0.1111111111111111,
+        "confusionMatrix": {
+          "tn": 272,
+          "fp": 34,
+          "fn": 6,
+          "tp": 76
+        }
+      },
+      "controlledFprOperatingPoint": {
+        "threshold": 0.6695152720825202,
+        "precision": 0.782608695652174,
+        "recall": 0.6585365853658537,
+        "f1": 0.7152317880794703,
+        "falsePositiveRate": 0.049019607843137254,
+        "confusionMatrix": {
+          "tn": 291,
+          "fp": 15,
+          "fn": 28,
+          "tp": 54
+        }
+      },
+      "bootstrap95": {
+        "prAuc": {
+          "point": 0.8341101631383288,
+          "lower95": 0.7675398533659209,
+          "median": 0.8362941388799601,
+          "upper95": 0.9059041654239867
+        },
+        "rocAuc": {
+          "point": 0.9490076518412243,
+          "lower95": 0.9214045155549601,
+          "median": 0.949982354325151,
+          "upper95": 0.9720963468917069
+        },
+        "recall": {
+          "point": 0.6585365853658537,
+          "lower95": 0.5487804878048781,
+          "median": 0.6585365853658537,
+          "upper95": 0.7682926829268293
+        },
+        "falsePositiveRate": {
+          "point": 0.049019607843137254,
+          "lower95": 0.026143790849673203,
+          "median": 0.048701298701298704,
+          "upper95": 0.07395498392282958
+        }
+      },
+      "prAucLiftOverPrevalence": {
+        "nullPrAuc": 0.211340206185567,
+        "prAuc": 0.8341101631383288,
+        "improvement": 0.6227699569527617,
+        "minimumMaterialLift": 0.1,
+        "ciAvailable": true,
+        "prAucLower95": 0.7675398533659209,
+        "prAucUpper95": 0.9059041654239867,
+        "lowerImprovement95": 0.5561996471803539,
+        "materialImprovementDemonstrated": true,
+        "possibleUnderfitting": false
+      }
+    }
+  },
+  "sealedSplits": {
+    "test": {
+      "rows": 390,
+      "metricsComputed": false
+    }
+  },
+  "promotion": {
+    "promotionEligible": false,
+    "freezeEligible": true,
+    "decision": "READY_FOR_FREEZE",
+    "checks": {
+      "validationRocAucAtLeast0_70": true,
+      "validationPrAucLower95ExceedsPrevalenceByMinLift": true,
+      "validationRecallAtControlledFprAtLeast0_50": true,
+      "validationFalsePositiveRateAtMost0_10": true,
+      "earlyStoppingConvergedBeforeSearchMaximum": true
+    },
+    "testPolicy": "SEALED_UNTIL_FREEZE",
+    "testOpenedByTraining": false,
+    "nextStep": "confirm-onchain-test.py (una sola apertura) y luego nueva cohorte externa",
+    "productionProbabilityReady": false
+  },
+  "featureImportance": [
+    {
+      "feature": "meanAmount",
+      "importance": 0.4129944384033308
+    },
+    {
+      "feature": "repeatedCounterpartyRatio",
+      "importance": 0.13268154472675683
+    },
+    {
+      "feature": "inboundAmount",
+      "importance": 0.10739933044544872
+    },
+    {
+      "feature": "counterpartyEntropy",
+      "importance": 0.04652008374049108
+    },
+    {
+      "feature": "outboundTopCounterpartyShare",
+      "importance": 0.03865023238795125
+    },
+    {
+      "feature": "transactionCount",
+      "importance": 0.02726172337642554
+    },
+    {
+      "feature": "inboundCount",
+      "importance": 0.0267440273833509
+    },
+    {
+      "feature": "averageDailyTransfers",
+      "importance": 0.023236430191859694
+    },
+    {
+      "feature": "transferCount",
+      "importance": 0.019496120843492105
+    },
+    {
+      "feature": "amountStd",
+      "importance": 0.018427346829195532
+    },
+    {
+      "feature": "netFlowAmount",
+      "importance": 0.018395516110395322
+    },
+    {
+      "feature": "outboundCount",
+      "importance": 0.01708798409203266
+    },
+    {
+      "feature": "topCounterpartyShare",
+      "importance": 0.016423632932232833
+    },
+    {
+      "feature": "meanInterEventSeconds",
+      "importance": 0.014508771233304305
+    },
+    {
+      "feature": "burstiness",
+      "importance": 0.013034349320137854
+    },
+    {
+      "feature": "inboundRatio",
+      "importance": 0.011363470928013824
+    },
+    {
+      "feature": "inboundTopCounterpartyShare",
+      "importance": 0.01060006730658801
+    },
+    {
+      "feature": "interEventStdSeconds",
+      "importance": 0.007190087675886716
+    },
+    {
+      "feature": "observedSpanDays",
+      "importance": 0.006825877313632759
+    },
+    {
+      "feature": "amountCv",
+      "importance": 0.006237421733948752
+    },
+    {
+      "feature": "maxAmount",
+      "importance": 0.004775301785271575
+    },
+    {
+      "feature": "uniqueOutboundCounterparties",
+      "importance": 0.004511245931569878
+    },
+    {
+      "feature": "outboundRatio",
+      "importance": 0.004135619040744731
+    },
+    {
+      "feature": "activeDays",
+      "importance": 0.0035468518405627164
+    },
+    {
+      "feature": "counterpartyHhi",
+      "importance": 0.002573125388022544
+    },
+    {
+      "feature": "usdtTransferCount",
+      "importance": 0.0016528748529726135
+    },
+    {
+      "feature": "uniqueCounterparties",
+      "importance": 0.0014922444371046585
+    },
+    {
+      "feature": "interEventCv",
+      "importance": 0.0009369888359960733
+    },
+    {
+      "feature": "outboundAmount",
+      "importance": 0.0004770171598436999
+    },
+    {
+      "feature": "usdtAmount",
+      "importance": 0.0004438813766168733
+    },
+    {
+      "feature": "activeDayRatio",
+      "importance": 0.00025077333910673513
+    },
+    {
+      "feature": "totalAmount",
+      "importance": 0.00012561903771225193
+    },
+    {
+      "feature": "uniqueInboundCounterparties",
+      "importance": 0.0
+    },
+    {
+      "feature": "selfTransferCount",
+      "importance": 0.0
+    },
+    {
+      "feature": "selfTransferRatio",
+      "importance": 0.0
+    },
+    {
+      "feature": "tusdTransferCount",
+      "importance": 0.0
+    },
+    {
+      "feature": "tusdAmount",
+      "importance": 0.0
+    },
+    {
+      "feature": "daysSinceLastTransfer",
+      "importance": 0.0
+    }
+  ],
+  "limitations": [
+    "The matched case-control prevalence is sampled and does not represent production prevalence.",
+    "The exported probability must not be interpreted as an absolute production risk until external prevalence calibration.",
+    "Validation is reused for estimator selection, Platt calibration and threshold selection; validation metrics are optimistic and only support selection.",
+    "The internal test split is sealed by this script and must be opened once with confirm-onchain-test.py after freezing.",
+    "A new external temporal cohort is required; previously opened holdouts listed in governance/data-openings.json cannot be reused."
+  ]
+}
