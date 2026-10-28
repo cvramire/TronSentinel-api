@@ -161,6 +161,8 @@ Ejemplo real del prototipo:
 |---|---|
 | Modelo | `tronsentinel-onchain-riskset-v0.6.1-20260928` |
 | Artefacto SHADOW | `tronsentinel-wallet-shadow-v0.7.0-20260928` |
+| Candidato rechazado | `tronsentinel-onchain-riskset-v0.7.0-20261023` (ciclo v7, `FAILED_INTERNAL_TEST`, 23-oct-2026); no se despliega |
+| «v6» y «v7» a secas | Versiones del dataset (risk set), no del modelo |
 | Feature set | `tron-wallet-onchain-1.0.0` |
 | Ventana | 90 días |
 | Umbral | `0,4288828973999436` |
