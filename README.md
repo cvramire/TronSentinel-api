@@ -106,7 +106,16 @@ umbral elegido en validación por la misma regla ([`05_evaluacion.ipynb`](notebo
   variable de recencia. El candidato v0.7 sin esa variable obtuvo recall 0,51 y fue rechazado
   ([`governance/cycles/v7/`](governance/cycles/v7/)); para el ciclo v8 ya están implementadas las herramientas de muestreo (ancla random-lookback); faltan datos nuevos y entrenamiento.
 
-## 5. Instalación y uso
+   **Nomenclatura de versiones.** Los artefactos se citan siempre con su nombre completo, porque «v0.7.0» aparece en dos de ellos:
+
+   | Nombre | Qué es |
+   |---|---|
+   | `tronsentinel-onchain-riskset-v0.6.1-20260928` | Modelo desplegado y evaluado en este README |
+   | `tronsentinel-wallet-shadow-v0.7.0-20260928` | Paquete SHADOW que envuelve al modelo v0.6.1 (umbral, percentiles del score y gobernanza); es el que corre en la API |
+   | `tronsentinel-onchain-riskset-v0.7.0-20261023` | Candidato del ciclo v7, rechazado el 23-oct-2026 (`FAILED_INTERNAL_TEST`); no se despliega |
+   | «v6» y «v7» a secas | Versiones del dataset (risk set), no del modelo |
+
+  ## 5. Instalación y uso
 
 ### Requisitos
 
