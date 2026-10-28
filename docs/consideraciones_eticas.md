@@ -45,7 +45,7 @@ antigüedad observable no mostró diferencias concluyentes (IC solapados).
 
 **Estrategias implementadas:** pesos balanceados por clase; auditoría de subgrupos como criterio de cada ciclo
 (acción si una banda con ≥ 15 casos queda con su límite superior de recall bajo el límite inferior global, o con FPR
-> 10 %); un ejemplo real de falso negativo de bajo volumen en la interfaz y la advertencia en "Acerca del modelo";
+superior a 10 %); real de falso negativo de bajo volumen en la interfaz y la advertencia en "Acerca del modelo";
 controles *random-lookback* y variables no monetarias en el ciclo v8. No calculamos métricas demográficas porque
 requerirían recolectar datos personales sin base legal.
 
