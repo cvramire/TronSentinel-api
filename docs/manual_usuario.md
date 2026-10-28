@@ -163,10 +163,13 @@ pip install -r app/requirements.txt
 python app/app.py          # abre http://127.0.0.1:8080/local
 ```
 
-* **Prueba con ejemplo riesgoso / legítimo:** carga una wallet del holdout externo y la evalúa.
-* **Evaluar CSV:** sube un archivo con las 38 columnas (descarga el CSV de ejemplo desde la misma página). Máximo
-  5 000 filas y 5 MB. Si una fila tiene un valor vacío, negativo o no numérico, se indica el número de fila.
-* **Descargar CSV** guarda los resultados.
+1. Ejecuta `python app/app.py` y abre `http://127.0.0.1:8080/local` en el navegador.
+2. Para una prueba rápida, pulsa **Prueba con ejemplo riesgoso** o **Prueba con ejemplo legítimo**: la página carga una
+   wallet del holdout externo y la evalúa.
+3. Para evaluar tus propios datos, descarga el CSV de ejemplo desde la misma página y úsalo como plantilla (debe tener
+   las 38 columnas). Súbelo con **Evaluar CSV**. Máximo 5 000 filas y 5 MB; si una fila tiene un valor vacío, negativo o
+   no numérico, se indica el número de fila.
+4. Revisa la tabla de resultados y pulsa **Descargar CSV** para guardarlos.
 
 ![Evaluador local](img/17-app-local-csv.png)
 
@@ -210,8 +213,11 @@ métricas pueden estar infladas por un sesgo de muestreo documentado.
 No. El modelo no detecta ~20 % de las riesgosas, y muchas más si mueven poco dinero.
 
 **¿Qué datos usa? ¿Guarda mi información?**
-Solo transferencias públicas de la blockchain TRON. No pide ni guarda tu nombre, correo ni IP; la clave no se almacena.
-La API registra la dirección evaluada, el resultado y la versión del modelo.
+Solo transferencias públicas de la blockchain TRON. No pide tu nombre ni tu correo, y la clave no se almacena.
+La API registra la dirección evaluada, el resultado y la versión del modelo. Para limitar el abuso, la demo pública
+cuenta las consultas por dirección IP del visitante (30 cada 10 minutos). Según el código (`functions/src/routes/demo.ts`),
+esa IP solo se usa como clave en la memoria temporal del servidor: no se escribe en la base de datos y se descarta al
+reiniciarse el servicio.
 
 **¿Por qué los ejemplos se evalúan en una fecha pasada?**
 Para mostrar lo que el modelo habría dicho **antes** de que Tether congelara la wallet, y poder comparar con la realidad.
@@ -231,5 +237,6 @@ No. Solo wallets TRON y transferencias USDT/TUSD.
 * **Repositorio e incidencias:** <https://github.com/cvramire/TronSentinel-api/issues>
 * **Equipo:** Carlos Vladimir Ramírez Espinoza · Madheline Katerine Torres Hallo — Proyecto Integrador en IA, UEES
 * **Clave de acceso para evaluación libre:** se solicita al equipo por correo o por el canal del curso; no se publica.
+* * **Tiempo de respuesta:** el equipo es académico; procuramos responder los *issues* y las solicitudes de clave en un plazo de 3 días hábiles.
 * **Reportar un resultado erróneo:** abre un *issue* con la dirección, la fecha de evaluación y el JSON (botón **Copiar
   JSON**). No incluyas datos personales.
