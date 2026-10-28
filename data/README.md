@@ -31,12 +31,12 @@ data/
 * **Grupo (`matchedCaseId`):** un caso y sus 2–4 controles. Nunca se separan entre particiones.
 * **Ventana:** 90 días previos a la fecha índice; ningún evento posterior entra en las variables.
 
-| Partición | Filas | Riesgosas | Controles | Fechas índice |
-|---|---:|---:|---:|---|
-| train | 1 294 | 280 | 1 014 | 16-mar-2026 → 04-may-2026 |
-| validation | 278 | 60 | 218 | 04-may-2026 → 14-may-2026 |
-| test (interno) | 282 | 60 | 222 | 14-may-2026 → 09-jun-2026 |
-| external_holdout | 286 | 99 | 187 | 25-may-2026 → 09-jun-2026 (wallets distintas) |
+| Partición | Filas | Riesgosas | Controles | Prevalencia | Fechas índice |
+|---|---:|---:|---:|---:|---|
+| train | 1 294 | 280 | 1 014 | 21,6 % | 16-mar-2026 → 04-may-2026 |
+| validation | 278 | 60 | 218 | 21,6 % | 04-may-2026 → 14-may-2026 |
+| test (interno) | 282 | 60 | 222 | 21,3 % | 14-may-2026 → 09-jun-2026 |
+| external_holdout | 286 | 99 | 187 | 34,6 % | 25-may-2026 → 09-jun-2026 (wallets distintas) |
 
 Hash SHA-256 del dataset de desarrollo: `1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585`.
 
