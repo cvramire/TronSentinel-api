@@ -22,7 +22,7 @@ Este documento reúne los dos workshops de la Semana 5 aplicados a TronSentinel:
 | Regresión logística (log1p + escalado) | 0,899 | 0,171 | 0,736 | 0,913 | 0,956 |
 | **TronSentinel v0.6.1** | **0,798** [0,708–0,865] | **0,037** [0,018–0,075] | 0,919 | **0,929** | **0,962** |
 
-Los IC son de Wilson. En validación cruzada agrupada sobre train, la configuración desplegada obtiene una PR-AUC de **0,910 ± 0,011**.
+Los IC son de Wilson. **Punto de operación de la regresión logística:** en este cuadro todos los modelos usan el umbral congelado 0,4289, con el que la regresión logística da recall 0,899 y FPR 0,171. En el README, la regresión logística usa su propio umbral, elegido en validación con la regla FPR ≤ 5 % (recall 0,768; FPR 0,048). Son dos puntos de operación del mismo modelo; la PR-AUC (0,913) no depende del umbral y coincide en ambos documentos. En validación cruzada agrupada sobre train, la configuración desplegada obtiene una PR-AUC de **0,910 ± 0,011**.
 
 ## 2. Workshop 1 · Escenarios críticos
 
@@ -56,7 +56,7 @@ Los IC son de Wilson. En validación cruzada agrupada sobre train, la configurac
 | Falla | Mitigación | Estado |
 |---|---|---|
 | Datos faltantes | No imputar en producción: historia incompleta → `NOT_SCORABLE`. Agregar validación de completitud por variable. | Implementado (`NOT_SCORABLE`); validación por variable pendiente |
-| Dependencia de dos variables | Monitoreo de integridad (pausa si una variable llega nula o constante). Diversificar con variables no monetarias. Corregir el sesgo de muestreo de `daysSinceLastTransfer` con controles *random-lookback*. | Muestreo corregido para el ciclo v8 |
+| Dependencia de dos variables | Monitoreo de integridad (pausa si una variable llega nula o constante). Diversificar con variables no monetarias. Corregir el sesgo de muestreo de `daysSinceLastTransfer` con controles *random-lookback*. | Herramientas de muestreo implementadas para el ciclo v8; faltan datos nuevos y entrenamiento |
 | Cambio de distribución | Entrenar con toda la distribución de volumen; FPR por banda en la auditoría de subgrupos; PSI sobre la mezcla de volúmenes. | Entrenamiento completo vigente; monitoreo pendiente |
 | Fraccionamiento | Variables robustas a la fragmentación (contrapartes, montos por contraparte, ráfagas), aumento de datos con positivos fraccionados y advertencia en el model card. | Propuesto para v8 |
 
@@ -114,7 +114,7 @@ Los IC son de Wilson. En validación cruzada agrupada sobre train, la configurac
 
 ## 4. Antes y después de la optimización
 
-Las tres configuraciones se entrenaron con todo train. El umbral de cada una se fijó en validación con FPR ≤ 5 %.
+Las tres configuraciones se entrenaron con todo train. El umbral de cada una se fijó en validación con FPR ≤ 5 %. La fila «Desplegada (antes)» reentrena la configuración desplegada en este notebook; no es el artefacto congelado de la sección 1, por lo que su FPR en el holdout (8/187 = 0,043) difiere de la del artefacto (7/187 = 0,037).
 
 | Configuración | Parámetros | PR-AUC CV | PR-AUC validación | PR-AUC holdout | Recall holdout | FPR holdout |
 |---|---|---:|---:|---:|---:|---:|
