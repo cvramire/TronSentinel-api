@@ -99,13 +99,12 @@ umbral elegido en validación por la misma regla ([`05_evaluacion.ipynb`](notebo
 **Lectura honesta de los resultados:**
 
 * Detecta 79 de 99 wallets riesgosas con 7 falsas alarmas en 187 legítimas. Supera claramente al azar y, en el umbral
-  operativo, a la regresión logística (más recall con menos falsas alarmas), aunque en ranking (PR-AUC) la diferencia
-  es pequeña.
+  operativo, a la regresión logística en las estimaciones puntuales (más recall con menos falsas alarmas), aunque los intervalos de confianza se solapan y en ranking (PR-AUC) la diferencia es pequeña.
 * **Con una prevalencia real del 1 %, solo ~18 de cada 100 alertas serían verdaderas.** Por eso solo prioriza revisión.
 * **Falla en wallets de bajo volumen:** recall 0,37 (IC 0,19–0,59) en el tercil inferior.
 * **Las métricas son un límite superior:** los controles se muestrearon activos en los 300 s previos, lo que infla la
   variable de recencia. El candidato v0.7 sin esa variable obtuvo recall 0,51 y fue rechazado
-  ([`governance/cycles/v7/`](governance/cycles/v7/)); el ciclo v8 corrige el muestreo.
+  ([`governance/cycles/v7/`](governance/cycles/v7/)); para el ciclo v8 ya están implementadas las herramientas de muestreo (ancla random-lookback); faltan datos nuevos y entrenamiento.
 
 ## 5. Instalación y uso
 
