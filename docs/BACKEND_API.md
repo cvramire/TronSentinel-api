@@ -105,7 +105,7 @@ npm run dataset:label -- \
   --output-dir /ruta/tronsentinel-point-in-time-v0.3.0
 ```
 
-La especificación completa se encuentra en `docs/LABELING_PROTOCOL.md`. Las filas sin seguimiento futuro completo se censuran; las wallets ya listadas al momento del snapshot se excluyen.
+La especificación completa se encuentra en [`archivo/LABELING_PROTOCOL.md`](archivo/LABELING_PROTOCOL.md) (documento histórico). Las filas sin seguimiento futuro completo se censuran; las wallets ya listadas al momento del snapshot se excluyen.
 
 ## Documentación del modelo
 

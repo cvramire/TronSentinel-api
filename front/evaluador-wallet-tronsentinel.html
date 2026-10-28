@@ -285,7 +285,7 @@
           <h3>Cómo leer el resultado</h3>
           <ul>
             <li><strong>Score 0–100:</strong> percentil frente a wallets de control. Un 85 significa "más parecida al riesgo que el 85 % de los controles", no 85 % de probabilidad.</li>
-            <li><strong>Probabilidad muestral:</strong> salida calibrada en una muestra caso-control (34,6 % de casos), no la probabilidad real en producción.</li>
+            <li><strong>Probabilidad muestral:</strong> salida calibrada con Platt en la partición de validación, una muestra caso-control con ≈ 21,6 % de casos; no es la probabilidad real en producción.</li>
             <li><strong>Decisión operativa:</strong> se recomienda revisión si la probabilidad supera el umbral congelado (<span id="aboutThreshold">42,89 %</span>), elegido con FPR ≤ 5 % en validación.</li>
           </ul>
         </div>

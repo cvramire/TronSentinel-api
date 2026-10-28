@@ -34,7 +34,9 @@ venv/
 # Archivos temporales
 *.log
 *.tmp
-*.bak# Logs
+*.bak
+
+# Logs
 logs
 *.log
 npm-debug.log*
