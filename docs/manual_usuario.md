@@ -237,6 +237,6 @@ No. Solo wallets TRON y transferencias USDT/TUSD.
 * **Repositorio e incidencias:** <https://github.com/cvramire/TronSentinel-api/issues>
 * **Equipo:** Carlos Vladimir Ramírez Espinoza · Madheline Katerine Torres Hallo — Proyecto Integrador en IA, UEES
 * **Clave de acceso para evaluación libre:** se solicita al equipo por correo o por el canal del curso; no se publica.
-* * **Tiempo de respuesta:** el equipo es académico; procuramos responder los *issues* y las solicitudes de clave en un plazo de 3 días hábiles.
+* **Tiempo de respuesta:** el equipo es académico; procuramos responder los *issues* y las solicitudes de clave en un plazo de 3 días hábiles.
 * **Reportar un resultado erróneo:** abre un *issue* con la dirección, la fecha de evaluación y el JSON (botón **Copiar
   JSON**). No incluyas datos personales.
