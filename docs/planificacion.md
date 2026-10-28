@@ -20,11 +20,11 @@ wallet a las wallets que después fueron incluidas en la blacklist de Tether?
 | General: priorizar wallets TRON para revisión humana con un modelo explicable | Sistema desplegado y usable | API + interfaz públicas | Cumplido (modo SHADOW) |
 | Detectar wallets que luego son congeladas | Recall en el umbral (holdout externo) | ≥ 0,50 | 0,798 (IC 0,708–0,865) |
 | Pocas falsas alarmas | FPR en el umbral | ≤ 0,10 (el umbral se fija con FPR ≤ 0,05 en validación; ver nota) | 0,037 (IC 0,018–0,075) |
-| Superar baselines | PR-AUC vs. dummy y logística | Mayor | 0,929 vs. 0,341 (dummy) y 0,913 (logística); frente a la logística la diferencia es de 0,016 y no la consideramos concluyente |
+| Superar baselines | PR-AUC vs. dummy y logística | Mayor | 0,929 vs. 0,341 (dummy) y 0,913 (logística); frente a la logística la diferencia es de 0,016    y no la presentamos como una ventaja demostrada |
 | Explicar cada resultado | Factores por wallet | Top-5 contribuciones | Cumplido |
 | Validación honesta | Holdout externo de una sola apertura | Sin reutilizar test | Cumplido y auditado |
 
-**Nota sobre el FPR y los baselines.** La meta de aceptación es FPR ≤ 0,10 en el holdout; para elegir el umbral usamos una restricción más estricta, FPR ≤ 0,05 en validación, de modo que quede margen frente a la variabilidad muestral. El resultado cumple ambas: 0,037 en el holdout, con un intervalo de Wilson al 95 % (0,018–0,075; 187 controles) cuyo límite superior queda por debajo de 0,10. Respecto a la regresión logística (PR-AUC 0,913), con 99 casos en el holdout la diferencia de 0,016 no es concluyente: no afirmamos que el modelo la supere en desempeño.
+**Nota sobre el FPR y los baselines.** La meta de aceptación es FPR ≤ 0,10 en el holdout;    el umbral se eligió con una regla más estricta, FPR ≤ 0,05 en validación (`maximumValidationFpr` en `models/model_v0.6.1.json`). El resultado cumple ambas: 0,037 en el holdout, con un intervalo de Wilson al 95 % (0,018–0,075; 187 controles) cuyo límite superior queda por debajo de 0,10. Respecto a la regresión logística (PR-AUC 0,913), la diferencia de 0,016 es pequeña y no la presentamos como una ventaja demostrada.
 
 ## 2. Justificación y relevancia
 
@@ -68,7 +68,7 @@ datos y de las entregas.
 | 10. Interfaz final (demo sin clave, Acerca de, exportación) | S5–S6 | Interfaz desplegada | 23-oct-2026 | Cumplido |
 | 11. Repositorio, documentación y manual | S6 | README, `docs/`, notebooks 01–05, pruebas | 23-oct-2026 | Cumplido |
 | 12. Video pitch y video de preguntas | Última semana | 2 videos | Pendiente | — |
-| 13. Ciclo v8: controles con ancla *random-lookback* sobre 90 días | Posterior a la entrega | Nuevo dataset con datos futuros y reevaluación con el protocolo de gobernanza | Planificado (no iniciado) | Requiere datos posteriores al cierre del dataset v7; no forma parte de esta entrega |
+| 13. Ciclo v8: controles con ancla *random-lookback* sobre 90 días | Posterior a la entrega | Recolección de una cohorte nueva de casos, dataset v8, entrenamiento y holdout nuevo de una sola apertura | Herramientas implementadas; sin datos ni entrenamiento | Requiere una nueva cohorte de casos; fuera de esta entrega |
 
 **Principales desviaciones:** (1) el diseño de datos tomó más tiempo del previsto porque los primeros controles no eran
 comparables en el tiempo; (2) el diagnóstico de overfitting reveló que 150 árboles no son el punto de convergencia y
@@ -102,7 +102,7 @@ Ambos participamos en la definición del problema, las decisiones de diseño y l
 | Riesgo | Prob. | Impacto | Mitigación aplicada | Estado |
 |---|---|---|---|---|
 | Fuga de información (usar datos del futuro o la propia etiqueta) | Alta | Alto | Variables solo con eventos anteriores a la fecha índice; validación automática de nombres prohibidos; partición por grupo | Controlado (0 eventos posteriores) |
-| Controles no comparables con los casos | Alta | Alto | Risk set: controles activos en la misma fecha índice | Mitigado parcialmente; sesgo residual de recencia detectado; rediseño del muestreo propuesto para v8 |
+| Controles no comparables con los casos | Alta | Alto | Risk set: controles activos en la misma fecha índice | Mitigado parcialmente; sesgo residual de recencia detectado; v8 con herramientas implementadas, pendiente de datos |
 | Sobreajuste por pocos positivos | Media | Alto | Stumps, `min_samples_leaf` 20, subsample, CV agrupada, bootstrap agrupado | Controlado (brecha train–val pequeña) |
 | Reutilizar el test para elegir el modelo | Media | Alto | Registro de aperturas (`governance/data-openings.json`); holdout externo de una sola apertura | Controlado |
 | Límites de tasa de TronGrid (HTTP 429) | Alta | Medio | Reintentos con espera; `--delay-ms` y `--max-retries` | Controlado |
