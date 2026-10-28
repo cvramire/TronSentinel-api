@@ -112,7 +112,9 @@ Las fórmulas son idénticas en el entrenamiento (`functions/scripts/build-oncha
 
 ## Limitaciones conocidas
 
-* La prevalencia del dataset (22–35 %) es la del diseño caso-control, no la de la red.
+* La prevalencia del dataset (≈ 21–22 % en desarrollo y 34,6 % en el holdout) es la del diseño caso-control, no la de la red, que se estima cercana a 1 %.
+* Hay pocos casos: 60 riesgosas en validación y 60 en el test interno, por lo que los intervalos de confianza son amplios.
+* Cobertura limitada: solo transferencias USDT y TUSD en TRON y una ventana de 90 días; la actividad en otros tokens o redes no entra en las variables.
 * Los controles se eligieron activos en los 300 s previos a la fecha índice, lo que hace que `daysSinceLastTransfer`
   sea ≈ 0 para ellos por construcción (sesgo documentado en `docs/MODEL_CARD.md`).
 * `tusdTransferCount` y `tusdAmount` son constantes (cero) en train.
