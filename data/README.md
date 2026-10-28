@@ -104,6 +104,12 @@ Las fórmulas son idénticas en el entrenamiento (`functions/scripts/build-oncha
 
 `src/data_processing.validate_dataset()` repite estos controles cada vez que se carga un CSV.
 
+## Reproducibilidad
+
+* Los datos crudos de TronGrid **no se versionan**; los CSV de `processed/` son la entrada de `python -m src.train` y de los notebooks.
+* El procedimiento de construcción (etiquetas, cohortes, historial de transferencias, variables y ensamblado) está en [`docs/TRAINING_RUNBOOK.md`](../docs/TRAINING_RUNBOOK.md), con los scripts de `functions/scripts/`. Requiere Node.js 22 y una clave de TronGrid.
+* El runbook describe el ciclo v7; el dataset v6 publicado aquí se construyó con el mismo procedimiento y el muestreo de controles de 300 s.
+
 ## Limitaciones conocidas
 
 * La prevalencia del dataset (22–35 %) es la del diseño caso-control, no la de la red.
