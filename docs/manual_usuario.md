@@ -131,7 +131,7 @@ Si la clave es incorrecta:
 ## 6. Exportar, copiar e historial
 
 * **Descargar CSV**, **Guardar PDF** y **Copiar JSON** están debajo de los factores (sección 3, elementos 8–10).
-* El **Historial de esta sesión** aparece al evaluar la primera wallet. Haz clic en una fila para volver a ver y
+* El **Historial de esta sesión** aparece al evaluar la primera wallet, sea un ejemplo o una propia; la columna **Origen** indica cuál. Haz clic en una fila para volver a ver y
   comparar ese resultado. El historial se borra al cerrar la página.
 
 ![Historial](img/09-historial.png)
@@ -177,13 +177,17 @@ python app/app.py          # abre http://127.0.0.1:8080/local
 | Problema | Causa probable | Solución |
 |---|---|---|
 | "Dirección no válida" | Falta o sobra un carácter, o se copió una dirección de otra red (p. ej. `0x…`) | Copia la dirección TRON completa (34 caracteres, empieza con `T`) |
+| "Falta la clave" | Escribiste una dirección válida pero dejaste vacío el campo de clave | Pega la clave de acceso o usa la pestaña **Ejemplos (sin clave)** |
 | "Clave no válida" | Clave incorrecta, con espacios o vencida | Vuelve a pegarla sin espacios; si persiste, solicita una nueva. Puedes usar los ejemplos sin clave |
 | "Wallet no evaluable: sin actividad" | No hubo transferencias USDT/TUSD en los 90 días | Es el comportamiento esperado: no hay datos para evaluar |
 | "Wallet no evaluable: volumen muy alto" | Historial demasiado grande (exchange o servicio) | El sistema no evalúa este tipo de wallets para no emitir un score incompleto |
+| "Historial incompleto" | La respuesta llegó con el historial truncado | No interpretes ese resultado: es una limitación del volumen de datos. Reintenta más tarde o evalúa otra wallet |
 | "Demasiadas consultas" | Se superaron 30 consultas de ejemplo en 10 minutos | Espera unos minutos |
 | La evaluación tarda más de 30 s | TronGrid lento o límite de tasa | Espera y reintenta; la primera consulta tras un periodo inactivo tarda más (arranque en frío) |
-| "No se pudo completar la evaluación" | Error de red o del proveedor | Revisa tu conexión y reintenta en unos minutos |
+| "Sin conexión con el servicio" | No fue posible contactar la API (sin internet, bloqueador de contenido o servicio caído) | Revisa tu conexión y reintenta; si persiste, recarga la página |
+| "No se pudo completar la evaluación" | La API respondió con un error inesperado o falló el proveedor de datos | Reintenta en unos minutos; si se repite, abre un *issue* con el código que muestra el mensaje |
 | No aparecen los ejemplos | Sin conexión a la API o bloqueador de contenido | Recarga la página; desactiva extensiones que bloqueen solicitudes |
+| "No se pudo cargar la ficha en vivo" | La ficha técnica de «Acerca del modelo» consulta la API y no respondió | Recarga la página; las métricas y limitaciones de esa sección siguen disponibles |
 | "No se pudo copiar" | El navegador no permite el portapapeles | Usa **Descargar CSV** o **Guardar PDF** |
 | El PDF sale con otro formato | Configuración de impresión | Elige "Guardar como PDF" y desactiva encabezados del navegador |
 | Evaluador local: "Faltan variables" | El CSV no tiene las 38 columnas | Usa el CSV de ejemplo como plantilla |
