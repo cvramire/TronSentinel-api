@@ -19,10 +19,12 @@ wallet a las wallets que después fueron incluidas en la blacklist de Tether?
 |---|---|---|---|
 | General: priorizar wallets TRON para revisión humana con un modelo explicable | Sistema desplegado y usable | API + interfaz públicas | Cumplido (modo SHADOW) |
 | Detectar wallets que luego son congeladas | Recall en el umbral (holdout externo) | ≥ 0,50 | 0,798 (IC 0,708–0,865) |
-| Pocas falsas alarmas | FPR en el umbral | ≤ 0,10 | 0,037 (IC 0,018–0,075) |
-| Superar baselines | PR-AUC vs. dummy y logística | Mayor | 0,929 vs. 0,341 y 0,913 |
+| Pocas falsas alarmas | FPR en el umbral | ≤ 0,10 (el umbral se fija con FPR ≤ 0,05 en validación; ver nota) | 0,037 (IC 0,018–0,075) |
+| Superar baselines | PR-AUC vs. dummy y logística | Mayor | 0,929 vs. 0,341 (dummy) y 0,913 (logística); frente a la logística la diferencia es de 0,016 y no la consideramos concluyente |
 | Explicar cada resultado | Factores por wallet | Top-5 contribuciones | Cumplido |
 | Validación honesta | Holdout externo de una sola apertura | Sin reutilizar test | Cumplido y auditado |
+
+**Nota sobre el FPR y los baselines.** La meta de aceptación es FPR ≤ 0,10 en el holdout; para elegir el umbral usamos una restricción más estricta, FPR ≤ 0,05 en validación, de modo que quede margen frente a la variabilidad muestral. El resultado cumple ambas: 0,037 en el holdout, con un intervalo de Wilson al 95 % (0,018–0,075; 187 controles) cuyo límite superior queda por debajo de 0,10. Respecto a la regresión logística (PR-AUC 0,913), con 99 casos en el holdout la diferencia de 0,016 no es concluyente: no afirmamos que el modelo la supere en desempeño.
 
 ## 2. Justificación y relevancia
 
@@ -66,11 +68,12 @@ datos y de las entregas.
 | 10. Interfaz final (demo sin clave, Acerca de, exportación) | S5–S6 | Interfaz desplegada | 23-oct-2026 | Cumplido |
 | 11. Repositorio, documentación y manual | S6 | README, `docs/`, notebooks 01–05, pruebas | 23-oct-2026 | Cumplido |
 | 12. Video pitch y video de preguntas | Última semana | 2 videos | Pendiente | — |
+| 13. Ciclo v8: controles con ancla *random-lookback* sobre 90 días | Posterior a la entrega | Nuevo dataset con datos futuros y reevaluación con el protocolo de gobernanza | Planificado (no iniciado) | Requiere datos posteriores al cierre del dataset v7; no forma parte de esta entrega |
 
 **Principales desviaciones:** (1) el diseño de datos tomó más tiempo del previsto porque los primeros controles no eran
 comparables en el tiempo; (2) el diagnóstico de overfitting reveló que 150 árboles no son el punto de convergencia y
 motivó la gobernanza de entrenamiento; (3) en octubre se detectó el sesgo de recencia de los controles, que llevó al
-ciclo v7 (rechazado) y al rediseño del muestreo para v8.
+ciclo v7 (rechazado) y a la propuesta de rediseño del muestreo para v8 (fase 13, pendiente).
 
 ## 5. Recursos necesarios
 
@@ -99,7 +102,7 @@ Ambos participamos en la definición del problema, las decisiones de diseño y l
 | Riesgo | Prob. | Impacto | Mitigación aplicada | Estado |
 |---|---|---|---|---|
 | Fuga de información (usar datos del futuro o la propia etiqueta) | Alta | Alto | Variables solo con eventos anteriores a la fecha índice; validación automática de nombres prohibidos; partición por grupo | Controlado (0 eventos posteriores) |
-| Controles no comparables con los casos | Alta | Alto | Risk set: controles activos en la misma fecha índice | Mitigado; sesgo residual de recencia detectado y corregido para v8 |
+| Controles no comparables con los casos | Alta | Alto | Risk set: controles activos en la misma fecha índice | Mitigado parcialmente; sesgo residual de recencia detectado; rediseño del muestreo propuesto para v8 |
 | Sobreajuste por pocos positivos | Media | Alto | Stumps, `min_samples_leaf` 20, subsample, CV agrupada, bootstrap agrupado | Controlado (brecha train–val pequeña) |
 | Reutilizar el test para elegir el modelo | Media | Alto | Registro de aperturas (`governance/data-openings.json`); holdout externo de una sola apertura | Controlado |
 | Límites de tasa de TronGrid (HTTP 429) | Alta | Medio | Reintentos con espera; `--delay-ms` y `--max-retries` | Controlado |
@@ -108,6 +111,10 @@ Ambos participamos en la definición del problema, las decisiones de diseño y l
 | Exposición de la clave de la API | Media | Medio | Solo se guarda el SHA-256; la clave se entrega en privado; demo sin clave limitada a 5 ejemplos | Controlado |
 | Costos de cloud | Baja | Medio | `maxInstances` 1, caché de 6 h en la demo, límite por IP | Controlado |
 | Retrasos del cronograma | Media | Medio | Priorizar el pipeline de datos; documentar cada ciclo | Ocurrió en datos; recuperado |
+| Etiquetas ruidosas (la blacklist solo incluye lo que Tether detecta y decide congelar) | Alta | Alto | Se declara como etiqueta proxy; el score se presenta como similitud con wallets congeladas, no como culpabilidad; las riesgosas aún no congeladas cuentan como controles | Abierto; límite declarado |
+| Evasión adaptativa (fraccionar transferencias o cambiar de patrón) | Media | Alto | Prueba de estrés con criterio fijado antes de correr (caída de recall ≤ 0,10): al fraccionar en 5 transferencias el recall baja de 0,80 a 0,62, y el criterio no se cumple | Abierto; límite declarado; el modelo no debe ser la única barrera |
+| Sesgo de población (wallets de bajo volumen) | Alta | Medio | Auditoría por subgrupos: en bajo volumen el recall es 0,37 (IC 0,19–0,59); advertencia en «Acerca del modelo» y ejemplo real de falso negativo | Parcial; aviso en el resultado propuesto para v8 |
+| Cambio de prevalencia (la prevalencia real es ≈ 1 %, no 21–35 %) | Alta | Alto | Advertencia de precisión por prevalencia: con 1 %, unas 82 de cada 100 alertas serían falsas | Mitigado en interfaz y documentos; sin recalibrar para la prevalencia real |
 
 ## 7. Metodología
 
