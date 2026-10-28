@@ -108,7 +108,7 @@ Las fórmulas son idénticas en el entrenamiento (`functions/scripts/build-oncha
 
 * Los datos crudos de TronGrid **no se versionan**; los CSV de `processed/` son la entrada de `python -m src.train` y de los notebooks.
 * El procedimiento de construcción (etiquetas, cohortes, historial de transferencias, variables y ensamblado) está en [`docs/TRAINING_RUNBOOK.md`](../docs/TRAINING_RUNBOOK.md), con los scripts de `functions/scripts/`. Requiere Node.js 22 y una clave de TronGrid.
-* El runbook describe el ciclo v7; el dataset v6 publicado aquí se construyó con el mismo procedimiento y el muestreo de controles de 300 s.
+* El dataset v6 se construyó el 27 y 28 de septiembre de 2026 con el diseño de risk set: controles activos en los 300 s previos a la fecha índice, ventana de 90 días y 38 variables. El runbook (docs/TRAINING_RUNBOOK.md), escrito después para el ciclo v7, formaliza ese procedimiento. El SHA-256 de data/processed/development_dataset_v6.csv es 1039cb723b12f11b7793394cef430d5eea0e97cac6582bf277fa691c86558585 y coincide con datasetHash de models/model_v0.6.1.json.
 
 ## Limitaciones conocidas
 
