@@ -15,11 +15,11 @@ KYC). Sí tiene sesgos de **construcción**:
 
 | Sesgo | Evidencia | Efecto en las predicciones |
 |---|---|---|
-| **Selección de controles (recencia)** | Los controles se eligieron activos en los 300 s previos a la fecha índice: 67,7 % tiene `daysSinceLastTransfer` < 0,01 días frente a una mediana de 1,24 días en casos; esa variable sola separa las clases con AUC ≈ 0,88 | El modelo aprende en parte el diseño. Las métricas son un **límite superior optimista**; una wallet evaluada justo después de transaccionar recibe un score más bajo. Al retirar la variable (candidato v7) el recall cayó a 0,51 y el candidato se rechazó |
+| **Selección de controles (recencia)** | Los controles se eligieron activos en los 300 s previos a la fecha índice: en la partición de entrenamiento, el 67,7 % de ellos tiene `daysSinceLastTransfer` < 0,01 días (66,7 % en todo el desarrollo, frente a 3 % de los casos), y los casos tienen una mediana de 1,24 días; esa variable sola separa las clases con AUC ≈ 0,88 | El modelo aprende en parte el diseño. Las métricas son un **límite superior optimista**; una wallet evaluada justo después de transaccionar recibe un score más bajo. Al retirar la variable (candidato v7) el recall cayó a 0,51 y el candidato se rechazó |
 | **Etiqueta proxy** | La blacklist de Tether solo incluye lo que Tether detecta y decide congelar | Wallets riesgosas aún no congeladas cuentan como controles; el modelo hereda los criterios (y omisiones) de Tether |
 | **Sesgo por volumen** | El modelo depende de montos altos (`meanAmount`, `maxAmount`) | Detecta peor las riesgosas de bajo volumen (ver sección 2) |
 | **Cobertura** | Solo USDT/TUSD en TRON, 90 días | Ignora actividad en otros tokens o redes |
-| **Prevalencia artificial** | 22–35 % de riesgosas en los datos vs. ≈ 1 % estimado en la red | La probabilidad muestral sobreestima el riesgo real |
+| **Prevalencia artificial** | ≈ 21–22 % de riesgosas en desarrollo y 34,6 % en el holdout, frente a ≈ 1 % estimado en la red | La probabilidad muestral sobreestima el riesgo real |
 
 **¿Quiénes podrían ser perjudicados?** (1) Propietarios de wallets legítimas con patrones parecidos a los casos
 (montos altos, poca actividad, contrapartes nuevas): comerciantes OTC, personas que reciben un pago grande o mueven
@@ -49,11 +49,13 @@ antigüedad observable no mostró diferencias concluyentes (IC solapados).
 controles *random-lookback* y variables no monetarias en el ciclo v8. No calculamos métricas demográficas porque
 requerirían recolectar datos personales sin base legal.
 
+**Resultado de la auditoría y acción adoptada.** La banda de volumen bajo cumple el criterio de acción (19 casos y límite superior de recall de 0,59, por debajo del límite inferior global de 0,71); ninguna banda supera una FPR de 10 %. En este ciclo la acción adoptada es de transparencia: el ejemplo real de falso negativo de bajo volumen y la advertencia «Un "riesgo bajo" protege menos ahí» en «Acerca del modelo». Para el ciclo v8 proponemos además mostrar un aviso en el resultado de toda wallet del tercil de volumen bajo (propuesta, aún no implementada).
+
 ## 3. Privacidad
 
 * **Datos usados:** direcciones TRON y transferencias públicas. Son **seudónimas**, no anónimas: pueden vincularse a una
   persona si se cruzan con datos KYC de un exchange, IP o redes sociales.
-* **Datos que no usamos:** nombres, documentos, correos, IP, ubicación ni ningún dato off-chain.
+* **Datos que no usamos:** nombres, documentos, correos, ubicación ni ningún dato off-chain. La dirección IP del visitante solo se usa como clave temporal en la memoria del servidor para limitar las consultas de la demo (30 cada 10 minutos): no se almacena en la base de datos y se descarta al reiniciar el servicio.
 * **Protección en el sistema:**
   * la API registra solo dirección evaluada, versión del modelo, resultado y fecha (`ts_predictions`), nunca la identidad
     de quien consulta;
@@ -73,7 +75,7 @@ requerirían recolectar datos personales sin base legal.
 | GDPR / CCPA | Solo si se ofrecen servicios a residentes de la UE / California | No aplica en el alcance actual; reevaluar antes de hacerlo |
 | EU AI Act | Según mercado y propósito | No clasificado como alto riesgo en el uso previsto |
 
-Como la blockchain es inmutable, la protección se concentra en los datos off-chain que sí controlamos
+Como la blockchain es inmutable, la protección se concentra en los datos off-chain que sí controlamos: el registro de predicciones, las claves de acceso y el historial de la sesión.
 
 Esta evaluación es académica y no sustituye la asesoría jurídica. Antes de cualquier producción haremos una revisión legal del caso de uso, en especial sobre la vigencia de los arts. 31 y 57 de la ley de lavado de activos.
 
