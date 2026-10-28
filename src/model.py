@@ -45,7 +45,7 @@ def load_model(path: str | Path) -> dict:
 
 
 def _check_features(names: list[str], features: pd.DataFrame) -> None:
-  """Lanza ValueError si faltan columnas del modelo en el DataFrame (informa hasta 5)."""
+    """Lanza ValueError si faltan columnas del modelo en el DataFrame (informa hasta 5)."""
     missing = [name for name in names if name not in features.columns]
     if missing:
         raise ValueError(f"FEATURES_MISSING:{','.join(missing[:5])}")
@@ -125,7 +125,7 @@ class BalancedGradientBoosting(ClassifierMixin, BaseEstimator):
 
     def __init__(self, n_estimators=150, learning_rate=0.04, max_depth=1,
                  min_samples_leaf=20, subsample=0.8, random_state=SEED):
-                   """Guarda los hiperparámetros; los valores por defecto son los del modelo desplegado v0.6.1."""
+        """Guarda los hiperparámetros; los valores por defecto son los del modelo desplegado v0.6.1."""
         self.n_estimators = n_estimators
         self.learning_rate = learning_rate
         self.max_depth = max_depth
@@ -134,7 +134,7 @@ class BalancedGradientBoosting(ClassifierMixin, BaseEstimator):
         self.random_state = random_state
 
     def fit(self, X, y):
-      """Ajusta un GradientBoostingClassifier con pesos balanceados por clase y devuelve ``self``."""
+        """Ajusta un GradientBoostingClassifier con pesos balanceados por clase y devuelve ``self``."""
         y = np.asarray(y, dtype=int)
         self.model_ = GradientBoostingClassifier(
             n_estimators=int(self.n_estimators), learning_rate=float(self.learning_rate),
@@ -146,16 +146,16 @@ class BalancedGradientBoosting(ClassifierMixin, BaseEstimator):
         return self
 
     def predict_proba(self, X):
-      """Probabilidades por clase del modelo ajustado, sin calibrar (columnas: clase 0 y clase 1)."""
+        """Probabilidades por clase del modelo ajustado, sin calibrar (columnas: clase 0 y clase 1)."""
         return self.model_.predict_proba(X)
 
     def predict(self, X):
-      """Clase predicha con el corte por defecto de scikit-learn (0,5), no con el umbral operativo congelado."""
+        """Clase predicha con el corte por defecto de scikit-learn (0,5), no con el umbral operativo congelado."""
         return self.model_.predict(X)
 
     @property
     def feature_importances_(self):
-      """Importancia por variable del modelo ajustado según scikit-learn (suma 1)."""
+        """Importancia por variable del modelo ajustado según scikit-learn (suma 1)."""
         return self.model_.feature_importances_
 
 
