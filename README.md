@@ -297,4 +297,4 @@ acceso público a los datos de la red TRON.
 ## 12. Videos
 
 * 🎬 **Video pitch (5 min):** [Ver video](https://youtu.be/XmXyey9o2rk)
-* 🎤 **Video de respuestas a las preguntas:** _enlace pendiente_
+* 🎤 **Video de respuestas a las preguntas:** [Ver video](https://drive.google.com/file/d/1DGcqGqPhdALFToM-ZH9IWeHCOhvXu_Tx/view?usp=drive_link)
